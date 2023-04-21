@@ -347,11 +347,11 @@ void ::xrn::engine::component::Rotation::updateDirection(
     if (control.isRotated() || this->isChanged()) {
         auto newRotation{ m_rotation + control.getRotation() };
 
-        // if (newRotation.y > ::xrn::engine::configuration.maxPitch) {
-            // newRotation.y = ::xrn::engine::configuration.maxPitch;
-        // } else if (newRotation.y < ::xrn::engine::configuration.minPitch) {
-            // newRotation.y = ::xrn::engine::configuration.minPitch;
-        // }
+        if (newRotation.y > ::xrn::engine::configuration.maxPitch) {
+            newRotation.y = ::xrn::engine::configuration.maxPitch;
+        } else if (newRotation.y < ::xrn::engine::configuration.minPitch) {
+            newRotation.y = ::xrn::engine::configuration.minPitch;
+        }
 
         this->set(::std::move(newRotation));
         m_direction = ::glm::normalize(::glm::vec3(

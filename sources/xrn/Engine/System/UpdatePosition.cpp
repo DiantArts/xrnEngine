@@ -67,6 +67,7 @@ void ::xrn::engine::system::UpdatePosition::operator()(
     if (velocity) {
         ::xrn::OptRef<const ::glm::vec3> direction;
         if (rotation) {
+            rotation->updateDirection();
             direction = rotation->getDirection();
         } else {
             direction = m_defaultDirection;
