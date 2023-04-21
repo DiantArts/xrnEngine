@@ -60,8 +60,6 @@ auto ::xrn::engine::component::Position::update(
         return *this;
     }
 
-    ::fmt::print("{}\n", velocity);
-
     // bot top
     if (control.isAbleToFly()) {
         if (control.isMovingUp()) {

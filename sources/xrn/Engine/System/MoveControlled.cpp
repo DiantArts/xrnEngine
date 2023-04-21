@@ -40,7 +40,7 @@
 ///////////////////////////////////////////////////////////////////////////
 void ::xrn::engine::system::MoveControlled::operator()(
     ::xrn::engine::vulkan::FrameInfo& frameInfo
-    , ::xrn::engine::component::Position position
+    , ::xrn::engine::component::Position& position
     , ::xrn::OptRef<::xrn::engine::component::Control> control
     , ::xrn::OptRef<::xrn::engine::component::Rotation> rotation
     , ::xrn::OptRef<::xrn::engine::component::Velocity> velocity
