@@ -36,7 +36,7 @@ template <
 {
     m_value = ::glm::vec3{ value, value, value };
 
-    auto& parent{ tatic_cast<Vector3::ParentType>(*this) };
+    auto& parent{ static_cast<Vector3::ParentType&>(*this) };
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
@@ -56,7 +56,7 @@ template <
 {
     m_value = ::glm::vec3{ valueX, valueY, valueZ };
 
-    auto& parent{ tatic_cast<Vector3::ParentType>(*this) };
+    auto& parent{ static_cast<Vector3::ParentType&>(*this) };
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
@@ -76,7 +76,7 @@ template <
     m_value.x = valueX;
     m_value.y = valueY;
 
-    auto& parent{ tatic_cast<Vector3::ParentType>(*this) };
+    auto& parent{ static_cast<Vector3::ParentType&>(*this) };
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
@@ -96,7 +96,7 @@ template <
     m_value.x = valueX;
     m_value.z = valueZ;
 
-    auto& parent{ tatic_cast<Vector3::ParentType>(*this) };
+    auto& parent{ static_cast<Vector3::ParentType&>(*this) };
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
@@ -116,7 +116,7 @@ template <
     m_value.y = valueY;
     m_value.z = valueZ;
 
-    auto& parent{ tatic_cast<Vector3::ParentType>(*this) };
+    auto& parent{ static_cast<Vector3::ParentType&>(*this) };
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
@@ -215,13 +215,31 @@ template <
 template <
     typename T
     , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::operator<=>(
+    const Vector3::ParentType& rhs
+) const
+    -> ::std::partial_ordering
+{
+    if (auto cmp{ m_value.x <=> rhs.m_value.x }; cmp != 0) {
+        return cmp;
+    }
+    if (auto cmp{ m_value.y <=> rhs.m_value.y }; cmp != 0) {
+        return cmp;
+    }
+    return this->m_value.z <=> rhs.m_value.z;
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::operator=(
     const float rhs
 ) -> Vector3::ParentType&
 {
     this->set(rhs);
 
-    auto& parent{ tatic_cast<Vector3::ParentType>(*this) };
+    auto& parent{ static_cast<Vector3::ParentType&>(*this) };
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
     }
@@ -234,7 +252,7 @@ template <
     , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::operator+(
     const float rhs
-) -> ::glm::vec3
+) const -> ::glm::vec3
 {
     return m_value + rhs;
 }
@@ -249,7 +267,7 @@ template <
 {
     m_value += rhs;
 
-    auto& parent{ tatic_cast<Vector3::ParentType>(*this) };
+    auto& parent{ static_cast<Vector3::ParentType&>(*this) };
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
@@ -263,7 +281,7 @@ template <
     , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::operator-(
     const float rhs
-) -> ::glm::vec3
+) const -> ::glm::vec3
 {
     return m_value - rhs;
 }
@@ -278,7 +296,7 @@ template <
 {
     m_value -= rhs;
 
-    auto& parent{ tatic_cast<Vector3::ParentType>(*this) };
+    auto& parent{ static_cast<Vector3::ParentType&>(*this) };
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
@@ -292,7 +310,7 @@ template <
     , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::operator*(
     const float rhs
-) -> ::glm::vec3
+) const -> ::glm::vec3
 {
     return m_value * rhs;
 }
@@ -307,7 +325,7 @@ template <
 {
     m_value *= rhs;
 
-    auto& parent{ tatic_cast<Vector3::ParentType>(*this) };
+    auto& parent{ static_cast<Vector3::ParentType&>(*this) };
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
@@ -321,7 +339,7 @@ template <
     , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::operator/(
     const float rhs
-) -> ::glm::vec3
+) const -> ::glm::vec3
 {
     return m_value / rhs;
 }
@@ -336,7 +354,7 @@ template <
 {
     m_value /= rhs;
 
-    auto& parent{ tatic_cast<Vector3::ParentType>(*this) };
+    auto& parent{ static_cast<Vector3::ParentType&>(*this) };
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);

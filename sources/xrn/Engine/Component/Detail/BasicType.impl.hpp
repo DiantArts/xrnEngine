@@ -38,7 +38,7 @@ template <
 {
     m_value = ::std::move(value);
 
-    auto& parent{ tatic_cast<BasicType::ParentType>(*this) };
+    auto& parent{ static_cast<BasicType::ParentType&>(*this) };
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
@@ -103,7 +103,7 @@ template <
 {
     this->set(rhs);
 
-    auto& parent{ tatic_cast<BasicType::ParentType>(*this) };
+    auto& parent{ static_cast<BasicType::ParentType&>(*this) };
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
@@ -118,7 +118,7 @@ template <
     , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::BasicType<T, U, hasChangedFlag>::operator+(
     BasicType::Type& rhs
-) -> BasicType::Type
+) const -> BasicType::Type
 {
     return m_value + rhs;
 }
@@ -134,7 +134,7 @@ template <
 {
     m_value += rhs;
 
-    auto& parent{ tatic_cast<BasicType::ParentType>(*this) };
+    auto& parent{ static_cast<BasicType::ParentType&>(*this) };
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
@@ -149,7 +149,7 @@ template <
     , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::BasicType<T, U, hasChangedFlag>::operator-(
     BasicType::Type& rhs
-) -> BasicType::Type
+) const -> BasicType::Type
 {
     return m_value - rhs;
 }
@@ -165,7 +165,7 @@ template <
 {
     m_value -= rhs;
 
-    auto& parent{ tatic_cast<BasicType::ParentType>(*this) };
+    auto& parent{ static_cast<BasicType::ParentType&>(*this) };
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
@@ -180,7 +180,7 @@ template <
     , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::BasicType<T, U, hasChangedFlag>::operator*(
     BasicType::Type& rhs
-) -> BasicType::Type
+) const -> BasicType::Type
 {
     return m_value * rhs;
 }
@@ -196,7 +196,7 @@ template <
 {
     m_value *= rhs;
 
-    auto& parent{ tatic_cast<BasicType::ParentType>(*this) };
+    auto& parent{ static_cast<BasicType::ParentType&>(*this) };
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
@@ -211,7 +211,7 @@ template <
     , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::BasicType<T, U, hasChangedFlag>::operator/(
     BasicType::Type& rhs
-) -> BasicType::Type
+) const -> BasicType::Type
 {
     return m_value / rhs;
 }
@@ -227,7 +227,7 @@ template <
 {
     m_value /= rhs;
 
-    auto& parent{ tatic_cast<BasicType::ParentType>(*this) };
+    auto& parent{ static_cast<BasicType::ParentType&>(*this) };
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
@@ -315,6 +315,6 @@ template <
 {
     m_isChanged = false;
 
-    auto& parent{ tatic_cast<BasicType::ParentType>(*this) };
+    auto& parent{ static_cast<BasicType::ParentType&>(*this) };
     return parent;
 }
