@@ -12,10 +12,10 @@ namespace xrn::engine::system {
 /// \brief No clue what it does xD
 /// \ingroup vulkan
 ///
-/// \include MoveControlled.hpp <MoveControlled.hpp>
+/// \include UpdatePosition.hpp <UpdatePosition.hpp>
 ///
 ///////////////////////////////////////////////////////////////////////////
-class MoveControlled {
+class UpdatePosition {
 
 public:
 
@@ -29,7 +29,7 @@ public:
     ///////////////////////////////////////////////////////////////////////////
     ///
     ///////////////////////////////////////////////////////////////////////////
-    MoveControlled();
+    UpdatePosition();
 
 
 

@@ -7,7 +7,7 @@
 #include <xrn/Engine/Vulkan/Descriptor.hpp>
 #include <xrn/Engine/System/Graphic/Render.hpp>
 #include <xrn/Engine/System/Graphic/PointLight.hpp>
-#include <xrn/Engine/System/MoveControlled.hpp>
+#include <xrn/Engine/System/UpdatePosition.hpp>
 #include <xrn/Engine/System/UpdateTransform3d.hpp>
 #include <xrn/Engine/Camera.hpp>
 #include <xrn/Engine/MousePointer.hpp>
@@ -311,7 +311,7 @@ private:
     // systems
     ::xrn::engine::system::graphic::Render m_draw3d;
     ::xrn::engine::system::graphic::PointLight m_drawPointLight;
-    ::xrn::engine::system::MoveControlled m_moveControlled;
+    ::xrn::engine::system::UpdatePosition m_updatePosition;
     ::xrn::engine::system::UpdateTransform3d m_updateTransform3d;
 
     // Tick

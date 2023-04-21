@@ -435,7 +435,7 @@ auto ::xrn::engine::AScene::update()
         auto* rotation{ m_registry.try_get<Rotation>(entity) };
         auto* velocity{ m_registry.try_get<Velocity>(entity) };
         auto* control{ m_registry.try_get<Control>(entity) };
-        m_moveControlled(m_frameInfo, position, control, rotation, velocity);
+        m_updatePosition(m_frameInfo, position, control, rotation, velocity);
     }
 
     // transform (apply position rotation scale)

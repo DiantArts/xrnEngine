@@ -6,7 +6,7 @@
 ///////////////////////////////////////////////////////////////////////////
 // Headers
 ///////////////////////////////////////////////////////////////////////////
-#include <xrn/Engine/System/MoveControlled.hpp>
+#include <xrn/Engine/System/UpdatePosition.hpp>
 
 
 
@@ -20,7 +20,7 @@
 ///////////////////////////////////////////////////////////////////////////
 ///
 ///////////////////////////////////////////////////////////////////////////
-::xrn::engine::system::MoveControlled::MoveControlled()
+::xrn::engine::system::UpdatePosition::UpdatePosition()
     : m_defaultDirection{
         ::glm::normalize(::glm::vec3(
             ::glm::cos(::glm::radians(0.0f)) * ::glm::cos(::glm::radians(0.0f))
@@ -38,7 +38,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::system::MoveControlled::operator()(
+void ::xrn::engine::system::UpdatePosition::operator()(
     ::xrn::engine::vulkan::FrameInfo& frameInfo
     , ::xrn::engine::component::Position& position
     , ::xrn::OptRef<::xrn::engine::component::Control> control
