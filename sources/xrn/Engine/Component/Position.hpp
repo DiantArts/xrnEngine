@@ -91,8 +91,9 @@ public:
     ///
     ///////////////////////////////////////////////////////////////////////////
     auto update(
-        const ::xrn::engine::component::Control& control
-        , const ::xrn::engine::component::Velocity& value
+        ::xrn::Time deltaTime
+        , const ::xrn::engine::component::Control& control
+        , const ::xrn::engine::component::Velocity& velocity
         , const ::glm::vec3& direction
     ) -> Position&;
 
@@ -100,7 +101,8 @@ public:
     ///
     ///////////////////////////////////////////////////////////////////////////
     auto update(
-        const ::xrn::engine::component::Velocity& value
+        ::xrn::Time deltaTime
+        , const ::xrn::engine::component::Velocity& velocity
         , const ::glm::vec3& direction
     ) -> Position&;
 
@@ -117,7 +119,8 @@ public:
     ///
     ///////////////////////////////////////////////////////////////////////////
     auto moveForward(
-        const ::xrn::engine::component::Velocity& value
+        ::xrn::Time deltaTime
+        , const ::xrn::engine::component::Velocity& velocity
         , const ::glm::vec3& direction
     ) -> Position&;
 
@@ -125,7 +128,8 @@ public:
     ///
     ///////////////////////////////////////////////////////////////////////////
     auto moveBackward(
-        const ::xrn::engine::component::Velocity& value
+        ::xrn::Time deltaTime
+        , const ::xrn::engine::component::Velocity& velocity
         , const ::glm::vec3& direction
     ) -> Position&;
 
@@ -133,7 +137,8 @@ public:
     ///
     ///////////////////////////////////////////////////////////////////////////
     auto moveRight(
-        const ::xrn::engine::component::Velocity& value
+        ::xrn::Time deltaTime
+        , const ::xrn::engine::component::Velocity& velocity
         , const ::glm::vec3& direction
     ) -> Position&;
 
@@ -141,7 +146,8 @@ public:
     ///
     ///////////////////////////////////////////////////////////////////////////
     auto moveLeft(
-        const ::xrn::engine::component::Velocity& value
+        ::xrn::Time deltaTime
+        , const ::xrn::engine::component::Velocity& velocity
         , const ::glm::vec3& direction
     ) -> Position&;
 
@@ -149,7 +155,8 @@ public:
     ///
     ///////////////////////////////////////////////////////////////////////////
     auto moveUp(
-        const ::xrn::engine::component::Velocity& value
+        ::xrn::Time deltaTime
+        , const ::xrn::engine::component::Velocity& velocity
         , const ::glm::vec3& direction
     ) -> Position&;
 
@@ -157,7 +164,8 @@ public:
     ///
     ///////////////////////////////////////////////////////////////////////////
     auto moveDown(
-        const ::xrn::engine::component::Velocity& value
+        ::xrn::Time deltaTime
+        , const ::xrn::engine::component::Velocity& velocity
         , const ::glm::vec3& direction
     ) -> Position&;
 

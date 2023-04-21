@@ -3,6 +3,7 @@
 #include <xrn/Engine/Component/Detail/BasicType.hpp>
 
 namespace xrn::engine::component { class Control; }
+namespace xrn::engine::component { class Acceleration; }
 
 namespace xrn::engine::component {
 
@@ -67,8 +68,15 @@ public:
     ///
     ///////////////////////////////////////////////////////////////////////////
     auto update(
+        const ::xrn::engine::component::Control& control
+    ) -> Velocity&;
+
+    ///////////////////////////////////////////////////////////////////////////
+    ///
+    ///////////////////////////////////////////////////////////////////////////
+    auto apply(
         ::xrn::Time deltaTime
-        , const ::xrn::engine::component::Control& control
+        , const ::xrn::engine::component::Acceleration& acceleration
     ) -> Velocity&;
 
 };

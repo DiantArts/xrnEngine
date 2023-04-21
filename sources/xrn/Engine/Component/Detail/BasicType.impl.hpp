@@ -114,7 +114,7 @@ template <
     , typename U
     , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::BasicType<T, U, hasChangedFlag>::operator<=>(
-    BasicType::Type& rhs
+    const BasicType::Type& rhs
 ) const
     -> ::std::partial_ordering
 {
@@ -140,7 +140,7 @@ template <
     , typename U
     , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::BasicType<T, U, hasChangedFlag>::operator=(
-    BasicType::Type& rhs
+    const BasicType::Type& rhs
 ) -> BasicType::ParentType&
 {
     this->set(rhs);
@@ -166,8 +166,9 @@ template <
     , typename U
     , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::BasicType<T, U, hasChangedFlag>::operator+(
-    BasicType::Type& rhs
-) const -> BasicType::Type
+    const BasicType::Type& rhs
+) const
+-> BasicType::Type
 {
     return m_value + rhs;
 }
@@ -178,7 +179,7 @@ template <
     , typename U
     , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::BasicType<T, U, hasChangedFlag>::operator+=(
-    BasicType::Type& rhs
+    const BasicType::Type& rhs
 ) -> BasicType::ParentType&
 {
     m_value += rhs;
@@ -204,8 +205,9 @@ template <
     , typename U
     , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::BasicType<T, U, hasChangedFlag>::operator-(
-    BasicType::Type& rhs
-) const -> BasicType::Type
+    const BasicType::Type& rhs
+) const
+-> BasicType::Type
 {
     return m_value - rhs;
 }
@@ -216,7 +218,7 @@ template <
     , typename U
     , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::BasicType<T, U, hasChangedFlag>::operator-=(
-    BasicType::Type& rhs
+    const BasicType::Type& rhs
 ) -> BasicType::ParentType&
 {
     m_value -= rhs;
@@ -242,8 +244,9 @@ template <
     , typename U
     , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::BasicType<T, U, hasChangedFlag>::operator*(
-    BasicType::Type& rhs
-) const -> BasicType::Type
+    const BasicType::Type& rhs
+) const
+-> BasicType::Type
 {
     return m_value * rhs;
 }
@@ -254,7 +257,7 @@ template <
     , typename U
     , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::BasicType<T, U, hasChangedFlag>::operator*=(
-    BasicType::Type& rhs
+    const BasicType::Type& rhs
 ) -> BasicType::ParentType&
 {
     m_value *= rhs;
@@ -280,8 +283,9 @@ template <
     , typename U
     , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::BasicType<T, U, hasChangedFlag>::operator/(
-    BasicType::Type& rhs
-) const -> BasicType::Type
+    const BasicType::Type& rhs
+) const
+-> BasicType::Type
 {
     return m_value / rhs;
 }
@@ -292,7 +296,7 @@ template <
     , typename U
     , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::BasicType<T, U, hasChangedFlag>::operator/=(
-    BasicType::Type& rhs
+    const BasicType::Type& rhs
 ) -> BasicType::ParentType&
 {
     m_value /= rhs;
@@ -394,4 +398,65 @@ template <
 
     auto& parent{ static_cast<BasicType::ParentType&>(*this) };
     return parent;
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+// Opposite way Comparisons
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , typename U
+    , bool V
+> auto operator+(
+    const auto& lhs
+    , const ::xrn::engine::component::detail::BasicType<T, U, V>& rhs
+) -> decltype(lhs + rhs.get())
+{
+    return lhs + rhs.get();
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , typename U
+    , bool V
+> auto operator-(
+    const auto& lhs
+    , const ::xrn::engine::component::detail::BasicType<T, U, V>& rhs
+) -> decltype(lhs - rhs.get())
+{
+    return lhs - rhs.get();
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , typename U
+    , bool V
+> auto operator*(
+    const auto& lhs
+    , const ::xrn::engine::component::detail::BasicType<T, U, V>& rhs
+) -> decltype(lhs * rhs.get())
+{
+    return lhs * rhs.get();
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , typename U
+    , bool V
+> auto operator/(
+    const auto& lhs
+    , const ::xrn::engine::component::detail::BasicType<T, U, V>& rhs
+) -> decltype(lhs / rhs.get())
+{
+    return lhs / rhs.get();
 }

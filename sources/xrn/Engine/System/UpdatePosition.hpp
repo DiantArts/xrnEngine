@@ -5,6 +5,8 @@
 #include <xrn/Engine/Component/Position.hpp>
 #include <xrn/Engine/Component/Rotation.hpp>
 #include <xrn/Engine/Component/Velocity.hpp>
+#include <xrn/Engine/Component/Acceleration.hpp>
+#include "xrn/Engine/Component/Acceleration.hpp"
 
 namespace xrn::engine::system {
 
@@ -49,6 +51,7 @@ public:
         , ::xrn::OptRef<::xrn::engine::component::Control> control
         , ::xrn::OptRef<::xrn::engine::component::Rotation> rotation
         , ::xrn::OptRef<::xrn::engine::component::Velocity> velocity
+        , ::xrn::OptRef<::xrn::engine::component::Acceleration> acceleration
     ) const;
 
 

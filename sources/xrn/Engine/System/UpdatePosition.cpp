@@ -44,6 +44,7 @@ void ::xrn::engine::system::UpdatePosition::operator()(
     , ::xrn::OptRef<::xrn::engine::component::Control> control
     , ::xrn::OptRef<::xrn::engine::component::Rotation> rotation
     , ::xrn::OptRef<::xrn::engine::component::Velocity> velocity
+    , ::xrn::OptRef<::xrn::engine::component::Acceleration> acceleration
 ) const
 {
     if (control) {
@@ -56,14 +57,19 @@ void ::xrn::engine::system::UpdatePosition::operator()(
         }
 
         if (velocity) {
-            velocity->update(frameInfo.deltaTime, control);
-            position.update(control, velocity, direction);
+            velocity->update(control);
+
+            // TODO: acceleration with control not working
+            if (acceleration) {
+                velocity->apply(frameInfo.deltaTime, acceleration);
+            }
+
+            position.update(frameInfo.deltaTime, control, velocity, direction);
         } else {
             position.update(frameInfo.deltaTime, control, direction);
         }
         return;
     }
-
     if (velocity) {
         ::xrn::OptRef<const ::glm::vec3> direction;
         if (rotation) {
@@ -73,6 +79,10 @@ void ::xrn::engine::system::UpdatePosition::operator()(
             direction = m_defaultDirection;
         }
 
-        position.update(velocity, direction);
+        if (acceleration) {
+            velocity->apply(frameInfo.deltaTime, acceleration);
+        }
+
+        position.update(frameInfo.deltaTime, velocity, direction);
     }
 }

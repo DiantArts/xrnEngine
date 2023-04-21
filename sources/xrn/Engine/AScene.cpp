@@ -427,19 +427,21 @@ auto ::xrn::engine::AScene::update()
     using PointLight = ::xrn::engine::component::PointLight;
     using Control = ::xrn::engine::component::Control;
     using Velocity = ::xrn::engine::component::Velocity;
+    using Acceleration = ::xrn::engine::component::Acceleration;
 
     this->updateCamera();
 
     // control
-    for (auto [entity, position]: m_registry.view<Position>().each()) {
+    for (auto [entity, position] : m_registry.view<Position>().each()) {
         auto* rotation{ m_registry.try_get<Rotation>(entity) };
         auto* velocity{ m_registry.try_get<Velocity>(entity) };
+        auto* acceleration{ m_registry.try_get<Acceleration>(entity) };
         auto* control{ m_registry.try_get<Control>(entity) };
-        m_updatePosition(m_frameInfo, position, control, rotation, velocity);
+        m_updatePosition(m_frameInfo, position, control, rotation, velocity, acceleration);
     }
 
     // transform (apply position rotation scale)
-    for (auto [entity, transform]: m_registry.view<Transform3d>().each()) {
+    for (auto [entity, transform] : m_registry.view<Transform3d>().each()) {
         auto* position{ m_registry.try_get<Position>(entity) };
         auto* rotation{ m_registry.try_get<Rotation>(entity) };
         auto* scale{ m_registry.try_get<Scale>(entity) };

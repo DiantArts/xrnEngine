@@ -33,11 +33,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
-///
-///////////////////////////////////////////////////////////////////////////
 auto ::xrn::engine::component::Velocity::update(
-    const ::xrn::Time deltaTime
-    , const ::xrn::engine::component::Control& control
+    const ::xrn::engine::component::Control& control
 ) -> Velocity&
 {
     // search the number of directions moving in and removing speed when multiple direction at once
@@ -77,6 +74,16 @@ auto ::xrn::engine::component::Velocity::update(
     }
 
     // apply movement
-    m_value =  control.getSpeed() * deltaTime * speedDirectionDivider / 100'000;
+    m_value =  control.getSpeed() * speedDirectionDivider / 100'000;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Velocity::apply(
+    const ::xrn::Time deltaTime
+    , const ::xrn::engine::component::Acceleration& acceleration
+) -> Velocity&
+{
+    m_value += acceleration * deltaTime.get();
     return *this;
 }
