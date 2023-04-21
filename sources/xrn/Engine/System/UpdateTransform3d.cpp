@@ -30,26 +30,26 @@ void ::xrn::engine::system::UpdateTransform3d::operator()(
         if (rotation) {
             if (scale) {
                 if (position->isChanged() || rotation->isChanged() || scale->isChanged()) {
-                    transform.updateMatrix(*position, *rotation, *scale);
-                    transform.updateNormalMatrix(*rotation, *scale);
+                    transform.updateMatrix(position, rotation, scale);
+                    transform.updateNormalMatrix(rotation, scale);
                 }
                 scale->resetChangedFlag();
                 rotation->resetChangedFlag();
             } else if (position->isChanged() || rotation->isChanged()) {
-                transform.updateMatrix(*position, *rotation);
-                transform.updateNormalMatrix(*rotation);
+                transform.updateMatrix(position, rotation);
+                transform.updateNormalMatrix(rotation);
                 rotation->resetChangedFlag();
             }
         } else {
             if (scale) {
                 if (position->isChanged() || scale->isChanged()) {
-                    transform.updateMatrix(*position);
-                    transform.updateMatrix(*position, { 0.0f, 0.0f, 0.0f }, *scale);
-                    transform.updateNormalMatrix(*scale);
+                    transform.updateMatrix(position);
+                    transform.updateMatrix(position, scale);
+                    transform.updateNormalMatrix(scale);
                     scale->resetChangedFlag();
                 }
             } else if (position->isChanged()) {
-                transform.updateMatrix(*position);
+                transform.updateMatrix(position);
             }
         }
         position->resetChangedFlag();

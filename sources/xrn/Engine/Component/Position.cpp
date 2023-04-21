@@ -19,6 +19,13 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ::xrn::engine::component::Position::Position(
+    const float value
+)
+    : ::xrn::engine::component::detail::Vector3<Position>{ ::glm::vec3{ value, value, value } }
+{}
+
+///////////////////////////////////////////////////////////////////////////
+::xrn::engine::component::Position::Position(
     ::glm::vec3 value
 )
     : ::xrn::engine::component::detail::Vector3<Position>{ ::std::move(value) }

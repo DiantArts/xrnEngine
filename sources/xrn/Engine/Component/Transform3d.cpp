@@ -30,9 +30,9 @@
 
 ///////////////////////////////////////////////////////////////////////////
 void ::xrn::engine::component::Transform3d::updateMatrix(
-    const xrn::engine::component::Position& position
-    , const xrn::engine::component::Rotation& rotation
-    , const xrn::engine::component::Scale& scale
+    const ::xrn::engine::component::Position& position
+    , const ::xrn::engine::component::Rotation& rotation
+    , const ::xrn::engine::component::Scale& scale
 )
 {
     const float c3{ ::glm::cos(::glm::radians(rotation.get().z)) };
@@ -67,8 +67,8 @@ void ::xrn::engine::component::Transform3d::updateMatrix(
 
 ///////////////////////////////////////////////////////////////////////////
 void ::xrn::engine::component::Transform3d::updateMatrix(
-    const xrn::engine::component::Position& position
-    , const xrn::engine::component::Rotation& rotation
+    const ::xrn::engine::component::Position& position
+    , const ::xrn::engine::component::Rotation& rotation
 )
 {
     this->updateMatrix(position, rotation, ::glm::vec3{ 1.0f });
@@ -76,19 +76,19 @@ void ::xrn::engine::component::Transform3d::updateMatrix(
 
 ///////////////////////////////////////////////////////////////////////////
 void ::xrn::engine::component::Transform3d::updateMatrix(
-    const xrn::engine::component::Position& position
-    , const xrn::engine::component::Scale& scale
+    const ::xrn::engine::component::Position& position
+    , const ::xrn::engine::component::Scale& scale
 )
 {
-    this->updateMatrix(position, ::glm::vec3{ 0.0f }, scale);
+    this->updateMatrix(position, ::xrn::engine::component::Rotation{ 0.0f }, scale);
 }
 
 ///////////////////////////////////////////////////////////////////////////
 void ::xrn::engine::component::Transform3d::updateMatrix(
-    const xrn::engine::component::Position& position
+    const ::xrn::engine::component::Position& position
 )
 {
-    this->updateMatrix(position, ::glm::vec3{ 0.0f }, ::glm::vec3{ 1.0f });
+    this->updateMatrix(position, ::xrn::engine::component::Rotation{ 0.0f }, ::xrn::engine::component::Scale{ 1.0f });
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -109,8 +109,8 @@ auto ::xrn::engine::component::Transform3d::getMatrix() const
 
 ///////////////////////////////////////////////////////////////////////////
 void ::xrn::engine::component::Transform3d::updateNormalMatrix(
-    const xrn::engine::component::Rotation& rotation
-    , const xrn::engine::component::Scale& scale
+    const ::xrn::engine::component::Rotation& rotation
+    , const ::xrn::engine::component::Scale& scale
 )
 {
     const float c3{ ::glm::cos(::glm::radians(rotation.get().z)) };
@@ -142,18 +142,18 @@ void ::xrn::engine::component::Transform3d::updateNormalMatrix(
 
 ///////////////////////////////////////////////////////////////////////////
 void ::xrn::engine::component::Transform3d::updateNormalMatrix(
-    const xrn::engine::component::Rotation& rotation
+    const ::xrn::engine::component::Rotation& rotation
 )
 {
-    return this->updateNormalMatrix(rotation.get(), ::glm::vec3{ 1.0f });
+    return this->updateNormalMatrix(rotation, ::xrn::engine::component::Scale{ 1.0f });
 }
 
 ///////////////////////////////////////////////////////////////////////////
 void ::xrn::engine::component::Transform3d::updateNormalMatrix(
-    const xrn::engine::component::Scale& scale
+    const ::xrn::engine::component::Scale& scale
 )
 {
-    return this->updateNormalMatrix(::glm::vec3{ 0.0f }, scale);
+    return this->updateNormalMatrix(::xrn::engine::component::Rotation{ 0.0f }, scale);
 }
 
 ///////////////////////////////////////////////////////////////////////////

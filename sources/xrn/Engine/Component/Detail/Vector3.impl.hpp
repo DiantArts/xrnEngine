@@ -21,6 +21,38 @@ template <
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
+// Rule of 5
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
+> ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::~Vector3() = default;
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
+> ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::Vector3(
+    Vector3&&
+) noexcept = default;;
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::operator=(
+    Vector3&&
+) noexcept
+    -> Vector3& = default;;
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
 // Setters getters
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,6 +114,81 @@ template <
 template <
     typename T
     , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::setX(
+    const float value
+) -> Vector3::ParentType&
+{
+    m_value.x = value;
+
+    auto& parent{ static_cast<Vector3::ParentType&>(*this) };
+
+    // set the changed flag if it exists
+    if constexpr (requires { parent.setChangedFlag(true); }) {
+        parent.setChangedFlag(true);
+    }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value.x); }) {
+        parent.formatValue(m_value.x);
+    }
+
+    return parent;
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::setY(
+    const float value
+) -> Vector3::ParentType&
+{
+    m_value.y = value;
+
+    auto& parent{ static_cast<Vector3::ParentType&>(*this) };
+
+    // set the changed flag if it exists
+    if constexpr (requires { parent.setChangedFlag(true); }) {
+        parent.setChangedFlag(true);
+    }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value.y); }) {
+        parent.formatValue(m_value.y);
+    }
+
+    return parent;
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::setZ(
+    const float value
+) -> Vector3::ParentType&
+{
+    m_value.z = value;
+
+    auto& parent{ static_cast<Vector3::ParentType&>(*this) };
+
+    // set the changed flag if it exists
+    if constexpr (requires { parent.setChangedFlag(true); }) {
+        parent.setChangedFlag(true);
+    }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value.z); }) {
+        parent.formatValue(m_value.z);
+    }
+
+    return parent;
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::setXY(
     const float valueX
     , const float valueY
@@ -106,6 +213,17 @@ template <
     }
 
     return parent;
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::setXY(
+    const ::glm::vec2& value
+) -> Vector3::ParentType&
+{
+    return this->setXY(value.x, value.y);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -142,6 +260,17 @@ template <
 template <
     typename T
     , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::setXZ(
+    const ::glm::vec2& value
+) -> Vector3::ParentType&
+{
+    return this->setXZ(value.x, value.y);
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::setYZ(
     const float valueY
     , const float valueZ
@@ -166,6 +295,17 @@ template <
     }
 
     return parent;
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::setYZ(
+    const ::glm::vec2& value
+) -> Vector3::ParentType&
+{
+    return this->setYZ(value.x, value.y);
 }
 
 ///////////////////////////////////////////////////////////////////////////
