@@ -30,11 +30,12 @@ auto ::xrn::engine::component::Control::getSpeed() const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::setSpeed(
+auto ::xrn::engine::component::Control::setSpeed(
     float speed
-)
+) -> Control&
 {
     m_moveSpeed = speed;
+    return *this;
 }
 
 
@@ -47,39 +48,51 @@ void ::xrn::engine::component::Control::setSpeed(
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::startMovingForward()
+auto ::xrn::engine::component::Control::startMovingForward()
+    -> Control&
 {
     m_movementState[Control::MovementState::forward] = true;
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::startMovingBackward()
+auto ::xrn::engine::component::Control::startMovingBackward()
+    -> Control&
 {
     m_movementState[Control::MovementState::backward] = true;
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::startMovingRight()
+auto ::xrn::engine::component::Control::startMovingRight()
+    -> Control&
 {
     m_movementState[Control::MovementState::right] = true;
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::startMovingLeft()
+auto ::xrn::engine::component::Control::startMovingLeft()
+    -> Control&
 {
     m_movementState[Control::MovementState::left] = true;
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::startMovingUp()
+auto ::xrn::engine::component::Control::startMovingUp()
+    -> Control&
 {
     m_movementState[Control::MovementState::up] = true;
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::startMovingDown()
+auto ::xrn::engine::component::Control::startMovingDown()
+    -> Control&
 {
     m_movementState[Control::MovementState::down] = true;
+    return *this;
 }
 
 
@@ -92,51 +105,67 @@ void ::xrn::engine::component::Control::startMovingDown()
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::stopMovingForward()
+auto ::xrn::engine::component::Control::stopMovingForward()
+    -> Control&
 {
     m_movementState[Control::MovementState::forward] = false;
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::stopMovingBackward()
+auto ::xrn::engine::component::Control::stopMovingBackward()
+    -> Control&
 {
     m_movementState[Control::MovementState::backward] = false;
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::stopMovingRight()
+auto ::xrn::engine::component::Control::stopMovingRight()
+    -> Control&
 {
     m_movementState[Control::MovementState::right] = false;
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::stopMovingLeft()
+auto ::xrn::engine::component::Control::stopMovingLeft()
+    -> Control&
 {
     m_movementState[Control::MovementState::left] = false;
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::stopMovingUp()
+auto ::xrn::engine::component::Control::stopMovingUp()
+    -> Control&
 {
     m_movementState[Control::MovementState::up] = false;
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::stopMovingDown()
+auto ::xrn::engine::component::Control::stopMovingDown()
+    -> Control&
 {
     m_movementState[Control::MovementState::down] = false;
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::stopMoving()
+auto ::xrn::engine::component::Control::stopMoving()
+    -> Control&
 {
     m_movementState.reset();
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::immobilize()
+auto ::xrn::engine::component::Control::immobilize()
+    -> Control&
 {
     m_movementState.reset();
+    return *this;
 }
 
 
@@ -200,105 +229,117 @@ auto ::xrn::engine::component::Control::isMovingDown() const
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::rotate(
+auto ::xrn::engine::component::Control::rotate(
     const ::glm::vec3& offset
-)
+) -> Control&
 {
     this->rotate(offset.x, offset.y, offset.z);
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::rotate(
+auto ::xrn::engine::component::Control::rotate(
     const float rotationOffsetX
     , const float rotationOffsetY
     , const float rotationOffsetZ
-)
+) -> Control&
 {
     this->rotateX(rotationOffsetX);
     this->rotateY(rotationOffsetY);
     this->rotateZ(rotationOffsetZ);
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::rotateX(
+auto ::xrn::engine::component::Control::rotateX(
     const float offset
-)
+) -> Control&
 {
     m_rotation.x += offset * ::xrn::engine::configuration.sensitivity.x;
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::rotateY(
+auto ::xrn::engine::component::Control::rotateY(
     const float offset
-)
+) -> Control&
 {
     m_rotation.y += offset * ::xrn::engine::configuration.sensitivity.y;
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::rotateZ(
+auto ::xrn::engine::component::Control::rotateZ(
     const float offset
-)
+) -> Control&
 {
     m_rotation.y += offset * ::xrn::engine::configuration.sensitivity.z;
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::rotateAbsolute(
+auto ::xrn::engine::component::Control::rotateAbsolute(
     ::glm::vec3 rotation
-)
+) -> Control&
 {
     m_rotation = ::std::move(rotation);
+    return *this;
 }
 
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::rotateAbsolute(
+auto ::xrn::engine::component::Control::rotateAbsolute(
     const float rotationX
     , const float rotationY
     , const float rotationZ
-)
+) -> Control&
 {
+    return *this;
     m_rotation = ::glm::vec3{ rotationX, rotationY, rotationZ };
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::rotateAbsoluteX(
+auto ::xrn::engine::component::Control::rotateAbsoluteX(
     const float rotationX
-)
+) -> Control&
 {
     m_rotation.x = rotationX;
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::rotateAbsoluteY(
+auto ::xrn::engine::component::Control::rotateAbsoluteY(
     const float rotationY
-)
+) -> Control&
 {
     m_rotation.y = rotationY;
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::rotateAbsoluteZ(
+auto ::xrn::engine::component::Control::rotateAbsoluteZ(
     const float rotationZ
-)
+) -> Control&
 {
     m_rotation.y = rotationZ;
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-[[ nodiscard ]] auto ::xrn::engine::component::Control::isRotated() const
+auto ::xrn::engine::component::Control::isRotated() const
     -> bool
 {
-    return m_rotation.x == 0 || m_rotation.y == 0 || m_rotation.z == 0;
+    return m_rotation.x == 0.f || m_rotation.y == 0.f || m_rotation.z == 0.f;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Control::resetRotatedFlag()
+auto ::xrn::engine::component::Control::resetRotatedFlag()
+    -> Control&
 {
-    m_rotation.x = 0;
-    m_rotation.y = 0;
-    m_rotation.z = 0;
+    m_rotation.x = 0.f;
+    m_rotation.y = 0.f;
+    m_rotation.z = 0.f;
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////

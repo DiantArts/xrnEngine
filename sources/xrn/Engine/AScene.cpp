@@ -99,6 +99,56 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::AScene::onUpdate()
+    -> bool
+{
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::AScene::onPostUpdate()
+    -> bool
+{
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::AScene::onTick(
+    ::xrn::Time deltaTime [[ maybe_unused ]]
+) -> bool
+{
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////////////
+void ::xrn::engine::AScene::onKeyPressed(
+    ::std::int16_t keyCode [[ maybe_unused ]]
+)
+{}
+
+///////////////////////////////////////////////////////////////////////////
+void ::xrn::engine::AScene::onKeyReleased(
+    ::std::int16_t keyCode [[ maybe_unused ]]
+)
+{}
+
+///////////////////////////////////////////////////////////////////////////
+void ::xrn::engine::AScene::onMouseMoved(
+    ::glm::vec2 _ [[ maybe_unused ]]
+)
+{}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+// System Events
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////////////
 void ::xrn::engine::AScene::onSystemKeyPressed(
     ::std::int16_t keyCode
 )
@@ -109,7 +159,6 @@ void ::xrn::engine::AScene::onSystemKeyPressed(
         return this->getWindow().close();
     }
 
-    // if player is controllable
     if (m_isCameraDetached) {
         if (
             auto* playerController{ m_registry.try_get<::xrn::engine::component::Control>(m_player) };
@@ -117,37 +166,51 @@ void ::xrn::engine::AScene::onSystemKeyPressed(
         ) {
             // move
             if (keyCode == ::xrn::engine::configuration.keyBinding.moveForward) {
-                return playerController->startMovingForward();
+                playerController->startMovingForward();
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveBackward) {
-                return playerController->startMovingBackward();
+                playerController->startMovingBackward();
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveLeft) {
-                return playerController->startMovingLeft();
+                playerController->startMovingLeft();
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveRight) {
-                return playerController->startMovingRight();
+                playerController->startMovingRight();
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveUp) {
-                return playerController->startMovingUp();
+                playerController->startMovingUp();
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveDown) {
-                return playerController->startMovingDown();
+                playerController->startMovingDown();
+                return;
 
             // move arrows
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveForward2) {
-                return playerController->startMovingForward();
+                playerController->startMovingForward();
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveBackward2) {
-                return playerController->startMovingBackward();
+                playerController->startMovingBackward();
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveLeft2) {
-                return playerController->startMovingLeft();
+                playerController->startMovingLeft();
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveRight2) {
-                return playerController->startMovingRight();
+                playerController->startMovingRight();
+                return;
 
             // look
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookUp) {
-                return playerController->rotateZ(-45 / 2);
+                playerController->rotateZ(-45 / 2);
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookDown) {
-                return playerController->rotateZ(45 / 2);
+                playerController->rotateZ(45 / 2);
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookLeft) {
-                return playerController->rotateX(45 / 2);
+                playerController->rotateX(45 / 2);
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookRight) {
-                return playerController->rotateX(-45 / 2);
+                playerController->rotateX(-45 / 2);
+                return;
             }
         }
     } else {
@@ -162,7 +225,6 @@ void ::xrn::engine::AScene::onSystemKeyReleased(
     ::std::int16_t keyCode
 )
 {
-    // if player is controllable
     if (m_isCameraDetached) {
         if (
             auto* playerController{ m_registry.try_get<::xrn::engine::component::Control>(m_player) };
@@ -170,27 +232,37 @@ void ::xrn::engine::AScene::onSystemKeyReleased(
         ) {
             // move
             if (keyCode == ::xrn::engine::configuration.keyBinding.moveForward) {
-                return playerController->stopMovingForward();
+                playerController->stopMovingForward();
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveBackward) {
-                return playerController->stopMovingBackward();
+                playerController->stopMovingBackward();
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveLeft) {
-                return playerController->stopMovingLeft();
+                playerController->stopMovingLeft();
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveRight) {
-                return playerController->stopMovingRight();
+                playerController->stopMovingRight();
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveUp) {
-                return playerController->stopMovingUp();
+                playerController->stopMovingUp();
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveDown) {
-                return playerController->stopMovingDown();
+                playerController->stopMovingDown();
+                return;
 
             // move arrows
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveForward2) {
-                return playerController->stopMovingForward();
+                playerController->stopMovingForward();
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveBackward2) {
-                return playerController->stopMovingBackward();
+                playerController->stopMovingBackward();
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveLeft2) {
-                return playerController->stopMovingLeft();
+                playerController->stopMovingLeft();
+                return;
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveRight2) {
-                return playerController->stopMovingRight();
+                playerController->stopMovingRight();
+                return;
 
             // look
             } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookUp) {
@@ -222,8 +294,8 @@ void ::xrn::engine::AScene::onSystemMouseMoved(
             auto* playerController{ m_registry.try_get<::xrn::engine::component::Control>(m_player) };
             playerController
         ) {
-            playerController->rotateX(-offset.x);
-            playerController->rotateY(offset.y);
+            // playerController->rotateX(-offset.x);
+            // playerController->rotateY(offset.y);
         }
     } else {
         this->onMouseMoved(offset);
@@ -289,6 +361,13 @@ auto ::xrn::engine::AScene::getMousePointer()
     return m_mousePointer;
 }
 
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::AScene::getFrameInfo()
+    -> ::xrn::engine::vulkan::FrameInfo&
+{
+    return m_frameInfo;
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -341,30 +420,36 @@ float deltaT;
 auto ::xrn::engine::AScene::update()
     -> bool
 {
+    using Position = ::xrn::engine::component::Position;
+    using Rotation = ::xrn::engine::component::Rotation;
+    using Scale = ::xrn::engine::component::Scale;
+    using Transform3d = ::xrn::engine::component::Transform3d;
+    using PointLight = ::xrn::engine::component::PointLight;
+    using Control = ::xrn::engine::component::Control;
+    using Velocity = ::xrn::engine::component::Velocity;
+
     this->updateCamera();
 
     // control
-    for (auto [entity, control]: m_registry.view<::xrn::engine::component::Control>().each()) {
-        auto* position{ m_registry.try_get<::xrn::engine::component::Position>(entity) };
-        auto* rotation{ m_registry.try_get<::xrn::engine::component::Rotation>(entity) };
-        m_moveControlled(m_frameInfo, control, position, rotation);
+    for (auto [entity, position]: m_registry.view<Position>().each()) {
+        auto* rotation{ m_registry.try_get<Rotation>(entity) };
+        auto* velocity{ m_registry.try_get<Velocity>(entity) };
+        auto* control{ m_registry.try_get<Control>(entity) };
+        m_moveControlled(m_frameInfo, position, control, rotation, velocity);
     }
 
     // transform (apply position rotation scale)
-    for (auto [entity, transform]: m_registry.view<::xrn::engine::component::Transform3d>().each()) {
-        auto* position{ m_registry.try_get<::xrn::engine::component::Position>(entity) };
-        auto* rotation{ m_registry.try_get<::xrn::engine::component::Rotation>(entity) };
-        auto* scale{ m_registry.try_get<::xrn::engine::component::Scale>(entity) };
+    for (auto [entity, transform]: m_registry.view<Transform3d>().each()) {
+        auto* position{ m_registry.try_get<Position>(entity) };
+        auto* rotation{ m_registry.try_get<Rotation>(entity) };
+        auto* scale{ m_registry.try_get<Scale>(entity) };
         m_updateTransform3d(m_frameInfo, transform, position, rotation, scale);
     }
 
     {
         auto lightIndex{ 0uz };
-        m_registry.view<::xrn::engine::component::PointLight, ::xrn::engine::component::Position>().each(
+        m_registry.view<PointLight, Position>().each(
             [&lightIndex](auto&, auto&) {
-                // auto rotation{ ::glm::rotate(::glm::mat4(1.0f), static_cast<float>(frameInfo.deltaTime.get()) / 1000, { 0.0f, -1.0f, 0.0f }) };
-                // position = ::glm::vec3{ rotation * ::glm::vec4{ ::glm::vec3{ position }, 1.0f } };
-                // m_drawPointLight.draw(m_frameInfo, pointLight, position, lightIndex);
                 ++lightIndex;
             }
         );
@@ -372,8 +457,8 @@ auto ::xrn::engine::AScene::update()
     }
 
     {
-        auto& position{ m_registry.get<::xrn::engine::component::Position>(m_camera.getId()) };
-        auto& rotation{ m_registry.get<::xrn::engine::component::Rotation>(m_camera.getId()) };
+        auto& position{ m_registry.get<Position>(m_camera.getId()) };
+        auto& rotation{ m_registry.get<Rotation>(m_camera.getId()) };
         m_camera.setViewDirection(position, rotation.getDirection());
     }
     return true;

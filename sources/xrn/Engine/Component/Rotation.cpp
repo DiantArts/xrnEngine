@@ -31,9 +31,9 @@
 ///
 ///////////////////////////////////////////////////////////////////////////
 ::xrn::engine::component::Rotation::Rotation(
-    float rotationXOffset
-    , float rotationYOffset
-    , float rotationZOffset
+    const float rotationXOffset
+    , const float rotationYOffset
+    , const float rotationZOffset
 )
 {
     this->rotate(rotationXOffset, rotationYOffset, rotationZOffset);
@@ -187,7 +187,7 @@ void ::xrn::engine::component::Rotation::set(
 
 ///////////////////////////////////////////////////////////////////////////
 void ::xrn::engine::component::Rotation::set(
-    ::glm::vec3 rotation
+    const ::glm::vec3& rotation
 )
 {
     m_rotation = ::std::move(rotation);
@@ -310,21 +310,22 @@ void ::xrn::engine::component::Rotation::setZ(
 }
 
 ///////////////////////////////////////////////////////////////////////////
-[[ nodiscard ]] auto ::xrn::engine::component::Rotation::getXY() const
+auto ::xrn::engine::component::Rotation::getXY() const
     -> ::glm::vec2
 {
     return ::glm::vec2{ m_rotation.x, m_rotation.y };
 }
 
 ///////////////////////////////////////////////////////////////////////////
-[[ nodiscard ]] auto ::xrn::engine::component::Rotation::get() const
+auto ::xrn::engine::component::Rotation::get() const
     -> const ::glm::vec3&
 {
     return m_rotation;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-[[ nodiscard ]] ::xrn::engine::component::Rotation::operator const ::glm::vec3&() const
+auto ::xrn::engine::component::Rotation::get()
+    -> ::glm::vec3&
 {
     return m_rotation;
 }
@@ -346,11 +347,11 @@ void ::xrn::engine::component::Rotation::updateDirection(
     if (control.isRotated() || this->isChanged()) {
         auto newRotation{ m_rotation + control.getRotation() };
 
-        if (newRotation.y > ::xrn::engine::configuration.maxPitch) {
-            newRotation.y = ::xrn::engine::configuration.maxPitch;
-        } else if (newRotation.y < ::xrn::engine::configuration.minPitch) {
-            newRotation.y = ::xrn::engine::configuration.minPitch;
-        }
+        // if (newRotation.y > ::xrn::engine::configuration.maxPitch) {
+            // newRotation.y = ::xrn::engine::configuration.maxPitch;
+        // } else if (newRotation.y < ::xrn::engine::configuration.minPitch) {
+            // newRotation.y = ::xrn::engine::configuration.minPitch;
+        // }
 
         this->set(::std::move(newRotation));
         m_direction = ::glm::normalize(::glm::vec3(
@@ -387,7 +388,7 @@ auto ::xrn::engine::component::Rotation::getDirection() const
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
-// Others
+// Changed flag
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -403,4 +404,225 @@ auto ::xrn::engine::component::Rotation::isChanged() const
 void ::xrn::engine::component::Rotation::resetChangedFlag()
 {
     m_isChanged = false;
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+// Comparisons
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator<=>(
+    const float other
+) const
+    -> ::std::partial_ordering
+{
+    if (auto cmp{ m_rotation.x <=> other }; cmp != 0) {
+        return cmp;
+    }
+    if (auto cmp{ m_rotation.y <=> other }; cmp != 0) {
+        return cmp;
+    }
+    return this->m_rotation.z <=> other;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator<=>(
+    const ::glm::vec3& other
+) const
+    -> ::std::partial_ordering
+{
+    if (auto cmp{ m_rotation.x <=> other.x }; cmp != 0) {
+        return cmp;
+    }
+    if (auto cmp{ m_rotation.y <=> other.y }; cmp != 0) {
+        return cmp;
+    }
+    return this->m_rotation.z <=> other.z;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator<=>(
+    const Rotation& other
+) const
+    -> ::std::partial_ordering
+{
+    if (auto cmp{ m_rotation.x <=> other.m_rotation.x }; cmp != 0) {
+        return cmp;
+    }
+    if (auto cmp{ m_rotation.y <=> other.m_rotation.y }; cmp != 0) {
+        return cmp;
+    }
+    return this->m_rotation.z <=> other.m_rotation.z;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator=(
+    const float rotation
+) -> Rotation&
+{
+    this->set(rotation, rotation, rotation);
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator=(
+    ::glm::vec3 rotation
+) -> Rotation&
+{
+    this->set(::std::move(rotation));
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator+(
+    const float rotation
+) -> ::glm::vec3
+{
+    return m_rotation + rotation;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator+(
+    ::glm::vec3 rotation
+) -> ::glm::vec3
+{
+    return m_rotation + rotation;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator+=(
+    const float rotation
+) -> Rotation&
+{
+    m_rotation += rotation;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator+=(
+    ::glm::vec3 rotation
+) -> Rotation&
+{
+    m_rotation += rotation;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator-(
+    const float rotation
+) -> ::glm::vec3
+{
+    return m_rotation - rotation;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator-(
+    ::glm::vec3 rotation
+) -> ::glm::vec3
+{
+    return m_rotation - rotation;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator-=(
+    const float rotation
+) -> Rotation&
+{
+    m_rotation -= rotation;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator-=(
+    ::glm::vec3 rotation
+) -> Rotation&
+{
+    m_rotation -= rotation;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator*(
+    const float rotation
+) -> ::glm::vec3
+{
+    return m_rotation * rotation;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator*(
+    ::glm::vec3 rotation
+) -> ::glm::vec3
+{
+    return m_rotation * rotation;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator*=(
+    const float rotation
+) -> Rotation&
+{
+    m_rotation *= rotation;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator*=(
+    ::glm::vec3 rotation
+) -> Rotation&
+{
+    m_rotation *= rotation;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator/(
+    const float rotation
+) -> ::glm::vec3
+{
+    return m_rotation / rotation;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator/(
+    ::glm::vec3 rotation
+) -> ::glm::vec3
+{
+    return m_rotation / rotation;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator/=(
+    const float rotation
+) -> Rotation&
+{
+    m_rotation /= rotation;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator/=(
+    ::glm::vec3 rotation
+) -> Rotation&
+{
+    m_rotation /= rotation;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+::xrn::engine::component::Rotation::operator const ::glm::vec3&() const
+{
+    return m_rotation;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Rotation::operator*()
+    -> ::glm::vec3&
+{
+    return m_rotation;
 }

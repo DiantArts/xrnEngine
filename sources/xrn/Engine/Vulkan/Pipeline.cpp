@@ -278,7 +278,7 @@ void ::xrn::engine::vulkan::Pipeline::bind(
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
-[[ nodiscard ]] auto ::xrn::engine::vulkan::Pipeline::getDevice()
+auto ::xrn::engine::vulkan::Pipeline::getDevice()
     -> ::xrn::engine::vulkan::Device&
 {
     return m_device;

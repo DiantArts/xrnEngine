@@ -19,7 +19,7 @@
 ///
 ///////////////////////////////////////////////////////////////////////////
 ::xrn::engine::component::Scale::Scale(
-    float scale
+    const float scale
 )
     : m_scale{ ::glm::vec3{ scale } }
     , m_isChanged{ true }
@@ -39,9 +39,9 @@
 ///
 ///////////////////////////////////////////////////////////////////////////
 ::xrn::engine::component::Scale::Scale(
-    float scaleX
-    , float scaleY
-    , float scaleZ
+    const float scaleX
+    , const float scaleY
+    , const float scaleZ
 )
     : m_scale{ ::glm::vec3{ scaleX, scaleY, scaleZ } }
     , m_isChanged{ true }
@@ -169,14 +169,15 @@ void ::xrn::engine::component::Scale::setZ(
 }
 
 ///////////////////////////////////////////////////////////////////////////
-[[ nodiscard ]] auto ::xrn::engine::component::Scale::get() const
+auto ::xrn::engine::component::Scale::get() const
     -> const ::glm::vec3&
 {
     return m_scale;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-[[ nodiscard ]] ::xrn::engine::component::Scale::operator const ::glm::vec3&() const
+auto ::xrn::engine::component::Scale::get()
+    -> ::glm::vec3&
 {
     return m_scale;
 }
@@ -185,7 +186,7 @@ void ::xrn::engine::component::Scale::setZ(
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
-// Others
+// Changed flag
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -203,4 +204,225 @@ auto ::xrn::engine::component::Scale::isChanged() const
 void ::xrn::engine::component::Scale::resetChangedFlag()
 {
     m_isChanged = false;
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+// Comparisons
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator<=>(
+    const float other
+) const
+    -> ::std::partial_ordering
+{
+    if (auto cmp{ m_scale.x <=> other }; cmp != 0) {
+        return cmp;
+    }
+    if (auto cmp{ m_scale.y <=> other }; cmp != 0) {
+        return cmp;
+    }
+    return this->m_scale.z <=> other;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator<=>(
+    const ::glm::vec3& other
+) const
+    -> ::std::partial_ordering
+{
+    if (auto cmp{ m_scale.x <=> other.x }; cmp != 0) {
+        return cmp;
+    }
+    if (auto cmp{ m_scale.y <=> other.y }; cmp != 0) {
+        return cmp;
+    }
+    return this->m_scale.z <=> other.z;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator<=>(
+    const Scale& other
+) const
+    -> ::std::partial_ordering
+{
+    if (auto cmp{ m_scale.x <=> other.m_scale.x }; cmp != 0) {
+        return cmp;
+    }
+    if (auto cmp{ m_scale.y <=> other.m_scale.y }; cmp != 0) {
+        return cmp;
+    }
+    return this->m_scale.z <=> other.m_scale.z;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator=(
+    const float scale
+) -> Scale&
+{
+    this->set(scale);
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator=(
+    ::glm::vec3 scale
+) -> Scale&
+{
+    this->set(::std::move(scale));
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator+(
+    const float scale
+) -> ::glm::vec3
+{
+    return m_scale + scale;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator+(
+    ::glm::vec3 scale
+) -> ::glm::vec3
+{
+    return m_scale + scale;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator+=(
+    const float scale
+) -> Scale&
+{
+    m_scale += scale;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator+=(
+    ::glm::vec3 scale
+) -> Scale&
+{
+    m_scale += scale;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator-(
+    const float scale
+) -> ::glm::vec3
+{
+    return m_scale - scale;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator-(
+    ::glm::vec3 scale
+) -> ::glm::vec3
+{
+    return m_scale - scale;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator-=(
+    const float scale
+) -> Scale&
+{
+    m_scale -= scale;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator-=(
+    ::glm::vec3 scale
+) -> Scale&
+{
+    m_scale -= scale;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator*(
+    const float scale
+) -> ::glm::vec3
+{
+    return m_scale * scale;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator*(
+    ::glm::vec3 scale
+) -> ::glm::vec3
+{
+    return m_scale * scale;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator*=(
+    const float scale
+) -> Scale&
+{
+    m_scale *= scale;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator*=(
+    ::glm::vec3 scale
+) -> Scale&
+{
+    m_scale *= scale;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator/(
+    const float scale
+) -> ::glm::vec3
+{
+    return m_scale / scale;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator/(
+    ::glm::vec3 scale
+) -> ::glm::vec3
+{
+    return m_scale / scale;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator/=(
+    const float scale
+) -> Scale&
+{
+    m_scale /= scale;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator/=(
+    ::glm::vec3 scale
+) -> Scale&
+{
+    m_scale /= scale;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+::xrn::engine::component::Scale::operator const ::glm::vec3&() const
+{
+    return m_scale;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Scale::operator*()
+    -> ::glm::vec3&
+{
+    return m_scale;
 }

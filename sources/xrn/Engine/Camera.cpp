@@ -176,7 +176,7 @@ auto ::xrn::engine::Camera::getView() const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-[[ nodiscard ]] auto ::xrn::engine::Camera::getId() const
+auto ::xrn::engine::Camera::getId() const
     -> ::entt::entity
 {
     return m_id;

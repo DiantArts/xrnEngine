@@ -1,6 +1,8 @@
+#include <compare>
 #include <pch.hpp>
 #include <xrn/Engine/Component/Position.hpp>
 #include <xrn/Engine/Component/Control.hpp>
+#include <xrn/Engine/Component/Velocity.hpp>
 
 
 
@@ -27,9 +29,9 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ::xrn::engine::component::Position::Position(
-    float positionX
-    , float positionY
-    , float positionZ
+    const float positionX
+    , const float positionY
+    , const float positionZ
 )
     : m_position{ positionX, positionY, positionZ }
     , m_isChanged{ true }
@@ -45,54 +47,20 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
-///
-///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Position::update(
-    float deltaTime
-    , ::xrn::engine::component::Control& control
+auto ::xrn::engine::component::Position::update(
+    ::xrn::Time deltaTime
+    , const ::xrn::engine::component::Control& control
     , const ::glm::vec3& direction
-)
+) -> Position&
 {
-    // search the number of directions moving in and removing speed when multiple direction at once
-    auto speedDirectionDivider{ 2.0f };
+    ::xrn::engine::component::Velocity velocity;
+    velocity.update(deltaTime, control);
 
-    // TODO: error left/right - backward - down
-
-    // bot top
-    if (control.isAbleToFly()) {
-        if (control.isMovingUp()) {
-            if (!control.isMovingDown()) {
-                speedDirectionDivider /= 1.5f;
-            }
-        } else if (control.isMovingDown()) {
-            speedDirectionDivider /= 1.5f;
-        }
+    if (velocity == 0.f) {
+        return *this;
     }
 
-    // left right
-    if (control.isMovingLeft()) {
-        if (!control.isMovingRight()) {
-            speedDirectionDivider /= 1.5f;
-        }
-    } else if (control.isMovingRight()) {
-        speedDirectionDivider /= 1.5f;
-    }
-
-    // forward backward
-    if (speedDirectionDivider > 1.0f) {
-        if (control.isMovingForward()) {
-            if (!control.isMovingBackward()) {
-                speedDirectionDivider /= 1.5f;
-            }
-        } else if (control.isMovingBackward()) {
-            speedDirectionDivider /= 1.5f;
-        } else if (speedDirectionDivider == 2.0f) {
-            return; // not any direction
-        }
-    }
-
-    // apply movement
-    auto velocity{ control.getSpeed() * deltaTime * speedDirectionDivider / 100'000 };
+    ::fmt::print("{}\n", velocity);
 
     // bot top
     if (control.isAbleToFly()) {
@@ -100,7 +68,6 @@ void ::xrn::engine::component::Position::update(
             if (!control.isMovingDown()) {
                 this->moveUp(velocity, direction);
             }
-            speedDirectionDivider /= 2;
         } else if (control.isMovingDown()) {
             this->moveDown(velocity, direction);
         }
@@ -123,7 +90,67 @@ void ::xrn::engine::component::Position::update(
     } else if (control.isMovingBackward()) {
         this->moveBackward(velocity, direction);
     }
+
+    return *this;
 }
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::update(
+    const ::xrn::engine::component::Control& control
+    , const ::xrn::engine::component::Velocity& velocity
+    , const ::glm::vec3& direction
+) -> Position&
+{
+    if (velocity == 0.f) {
+        return *this;
+    }
+
+    // bot top
+    if (control.isAbleToFly()) {
+        if (control.isMovingUp()) {
+            if (!control.isMovingDown()) {
+                this->moveUp(velocity, direction);
+            }
+        } else if (control.isMovingDown()) {
+            this->moveDown(velocity, direction);
+        }
+    }
+
+    // left right
+    if (control.isMovingLeft()) {
+        if (!control.isMovingRight()) {
+            this->moveLeft(velocity, direction);
+        }
+    } else if (control.isMovingRight()) {
+        this->moveRight(velocity, direction);
+    }
+
+    // forward backward
+    if (control.isMovingForward()) {
+        if (!control.isMovingBackward()) {
+            this->moveForward(velocity, direction);
+        }
+    } else if (control.isMovingBackward()) {
+        this->moveBackward(velocity, direction);
+    }
+
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::update(
+    const ::xrn::engine::component::Velocity& velocity
+    , const ::glm::vec3& direction
+) -> Position&
+{
+    if (velocity == 0.f) {
+        return *this;
+    }
+
+    this->moveForward(velocity, direction);
+    return *this;
+}
+
 
 
 
@@ -135,110 +162,132 @@ void ::xrn::engine::component::Position::update(
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Position::moveForward(
-    const float velocity
+auto ::xrn::engine::component::Position::moveForward(
+    const ::xrn::engine::component::Velocity& velocity
     , const ::glm::vec3& direction
-)
+) -> Position&
 {
-    m_position += velocity * direction;
+    m_position += velocity.get() * direction;
     m_isChanged = true;
+
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Position::moveBackward(
-    const float velocity
+auto ::xrn::engine::component::Position::moveBackward(
+    const ::xrn::engine::component::Velocity& velocity
     , const ::glm::vec3& direction
-)
+) -> Position&
 {
-    m_position -= velocity * direction;
+    m_position -= velocity.get() * direction;
     m_isChanged = true;
+
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Position::moveRight(
-    const float velocity
+auto ::xrn::engine::component::Position::moveRight(
+    const ::xrn::engine::component::Velocity& velocity
     , const ::glm::vec3& direction
-)
+) -> Position&
 {
-    m_position -= ::glm::normalize(::glm::cross(direction, ::glm::vec3{ 0.0f, 1.0f, 0.0f })) * velocity;
+    m_position -= ::glm::normalize(::glm::cross(direction, ::glm::vec3{ 0.0f, 1.0f, 0.0f })) * velocity.get();
     m_isChanged = true;
+
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Position::moveLeft(
-    const float velocity
+auto ::xrn::engine::component::Position::moveLeft(
+    const ::xrn::engine::component::Velocity& velocity
     , const ::glm::vec3& direction
-)
+) -> Position&
 {
-    m_position += ::glm::normalize(::glm::cross(direction, ::glm::vec3{ 0.0f, 1.0f, 0.0f })) * velocity;
+    m_position += ::glm::normalize(::glm::cross(direction, ::glm::vec3{ 0.0f, 1.0f, 0.0f })) * velocity.get();
     m_isChanged = true;
+
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Position::moveUp(
-    const float velocity
+auto ::xrn::engine::component::Position::moveUp(
+    const ::xrn::engine::component::Velocity& velocity
     , const ::glm::vec3& direction [[ maybe_unused ]]
-)
+) -> Position&
 {
-    m_position.y -= velocity;
+    m_position.y -= velocity.get();
     m_isChanged = true;
+
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Position::moveDown(
-    const float velocity
+auto ::xrn::engine::component::Position::moveDown(
+    const ::xrn::engine::component::Velocity& velocity
     , const ::glm::vec3& direction [[ maybe_unused ]]
-)
+) -> Position&
 {
-    m_position.y += velocity;
+    m_position.y += velocity.get();
     m_isChanged = true;
+
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Position::move(
+auto ::xrn::engine::component::Position::move(
     const ::glm::vec3& offset
-)
+) -> Position&
 {
     m_position += offset;
     m_isChanged = true;
+
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Position::move(
+auto ::xrn::engine::component::Position::move(
     const float offsetX
     , const float offsetY
     , const float offsetZ
-)
+) -> Position&
 {
     m_position += ::glm::vec3{ offsetX, offsetY, offsetZ };
     m_isChanged = true;
+
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Position::moveX(
+auto ::xrn::engine::component::Position::moveX(
     const float offset
-)
+) -> Position&
 {
     m_position.x += offset;
     m_isChanged = true;
+
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Position::moveY(
+auto ::xrn::engine::component::Position::moveY(
     const float offset
-)
+) -> Position&
 {
     m_position.y -= offset;
     m_isChanged = true;
+
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Position::moveZ(
+auto ::xrn::engine::component::Position::moveZ(
     const float offset
-)
+) -> Position&
 {
     m_position.z += offset;
     m_isChanged = true;
+
+    return *this;
 }
 
 
@@ -251,50 +300,71 @@ void ::xrn::engine::component::Position::moveZ(
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Position::set(
+auto ::xrn::engine::component::Position::set(
+    const float position
+) -> Position&
+{
+    m_position = ::glm::vec3{ position, position, position };
+    m_isChanged = true;
+
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::set(
     ::glm::vec3 position
-)
+) -> Position&
 {
     m_position = ::std::move(position);
     m_isChanged = true;
+
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Position::set(
+auto ::xrn::engine::component::Position::set(
     const float positionX
     , const float positionY
     , const float positionZ
-)
+) -> Position&
 {
     m_position = ::glm::vec3{ positionX, positionY, positionZ };
     m_isChanged = true;
+
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Position::setX(
+auto ::xrn::engine::component::Position::setX(
     const float position
-)
+) -> Position&
 {
     m_position.x = position;
     m_isChanged = true;
+
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Position::setY(
+auto ::xrn::engine::component::Position::setY(
     const float position
-)
+) -> Position&
 {
     m_position.y = position;
     m_isChanged = true;
+
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Position::setZ(
+auto ::xrn::engine::component::Position::setZ(
     const float position
-)
+) -> Position&
 {
     m_position.z = position;
     m_isChanged = true;
+
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -305,7 +375,8 @@ auto ::xrn::engine::component::Position::get() const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-[[ nodiscard ]] ::xrn::engine::component::Position::operator const ::glm::vec3&() const
+auto ::xrn::engine::component::Position::get()
+    -> ::glm::vec3&
 {
     return m_position;
 }
@@ -314,7 +385,7 @@ auto ::xrn::engine::component::Position::get() const
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
-// Others
+// Changed flag
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -329,7 +400,230 @@ auto ::xrn::engine::component::Position::isChanged() const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Position::resetChangedFlag()
+auto ::xrn::engine::component::Position::resetChangedFlag()
+    -> Position&
 {
     m_isChanged = false;
+    return *this;
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+// Comparisons
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator<=>(
+    const float other
+) const
+    -> ::std::partial_ordering
+{
+    if (auto cmp{ m_position.x <=> other }; cmp != 0) {
+        return cmp;
+    }
+    if (auto cmp{ m_position.y <=> other }; cmp != 0) {
+        return cmp;
+    }
+    return this->m_position.z <=> other;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator<=>(
+    const ::glm::vec3& other
+) const
+    -> ::std::partial_ordering
+{
+    if (auto cmp{ m_position.x <=> other.x }; cmp != 0) {
+        return cmp;
+    }
+    if (auto cmp{ m_position.y <=> other.y }; cmp != 0) {
+        return cmp;
+    }
+    return this->m_position.z <=> other.z;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator<=>(
+    const Position& other
+) const
+    -> ::std::partial_ordering
+{
+    if (auto cmp{ m_position.x <=> other.m_position.x }; cmp != 0) {
+        return cmp;
+    }
+    if (auto cmp{ m_position.y <=> other.m_position.y }; cmp != 0) {
+        return cmp;
+    }
+    return this->m_position.z <=> other.m_position.z;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator=(
+    const float position
+) -> Position&
+{
+    this->set(position);
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator=(
+    ::glm::vec3 position
+) -> Position&
+{
+    this->set(::std::move(position));
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator+(
+    const float position
+) -> ::glm::vec3
+{
+    return m_position + position;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator+(
+    ::glm::vec3 position
+) -> ::glm::vec3
+{
+    return m_position + position;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator+=(
+    const float position
+) -> Position&
+{
+    m_position += position;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator+=(
+    ::glm::vec3 position
+) -> Position&
+{
+    m_position += position;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator-(
+    const float position
+) -> ::glm::vec3
+{
+    return m_position - position;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator-(
+    ::glm::vec3 position
+) -> ::glm::vec3
+{
+    return m_position - position;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator-=(
+    const float position
+) -> Position&
+{
+    m_position -= position;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator-=(
+    ::glm::vec3 position
+) -> Position&
+{
+    m_position -= position;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator*(
+    const float position
+) -> ::glm::vec3
+{
+    return m_position * position;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator*(
+    ::glm::vec3 position
+) -> ::glm::vec3
+{
+    return m_position * position;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator*=(
+    const float position
+) -> Position&
+{
+    m_position *= position;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator*=(
+    ::glm::vec3 position
+) -> Position&
+{
+    m_position *= position;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator/(
+    const float position
+) -> ::glm::vec3
+{
+    return m_position / position;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator/(
+    ::glm::vec3 position
+) -> ::glm::vec3
+{
+    return m_position / position;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator/=(
+    const float position
+) -> Position&
+{
+    m_position /= position;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator/=(
+    ::glm::vec3 position
+) -> Position&
+{
+    m_position /= position;
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+::xrn::engine::component::Position::operator const ::glm::vec3&() const
+{
+    return m_position;
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Position::operator*()
+    -> ::glm::vec3&
+{
+    return m_position;
 }

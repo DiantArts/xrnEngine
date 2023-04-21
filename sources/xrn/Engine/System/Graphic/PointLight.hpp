@@ -16,7 +16,6 @@ namespace xrn::engine::system::graphic {
 ///
 ///////////////////////////////////////////////////////////////////////////
 class PointLight
-    // : public ::xrn::engine::system::graphic::ASystem
 {
 
 public:

@@ -12,6 +12,26 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
+// Constructor
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////
+///
+///////////////////////////////////////////////////////////////////////////
+::xrn::engine::system::MoveControlled::MoveControlled()
+    : m_defaultDirection{
+        ::glm::normalize(::glm::vec3(
+            ::glm::cos(::glm::radians(0.0f)) * ::glm::cos(::glm::radians(0.0f))
+            , ::glm::sin(::glm::radians(0.0f))
+            , ::glm::sin(::glm::radians(0.0f)) * ::glm::cos(::glm::radians(0.0f))
+        ))
+    }
+{}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
 // Basic
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -20,26 +40,38 @@
 ///////////////////////////////////////////////////////////////////////////
 void ::xrn::engine::system::MoveControlled::operator()(
     ::xrn::engine::vulkan::FrameInfo& frameInfo
-    , ::xrn::engine::component::Control& control
-    , ::xrn::OptRef<::xrn::engine::component::Position> position
+    , ::xrn::engine::component::Position position
+    , ::xrn::OptRef<::xrn::engine::component::Control> control
     , ::xrn::OptRef<::xrn::engine::component::Rotation> rotation
+    , ::xrn::OptRef<::xrn::engine::component::Velocity> velocity
 ) const
 {
-    if (rotation) {
-        rotation->updateDirection(control);
-        if (position) {
-            position->update(frameInfo.deltaTime, control, rotation->getDirection());
+    if (control) {
+        ::xrn::OptRef<const ::glm::vec3> direction;
+        if (rotation) {
+            rotation->updateDirection(control);
+            direction = rotation->getDirection();
+        } else {
+            direction = m_defaultDirection;
         }
-    } else {
-        if (position) {
-            auto direction{
-                ::glm::normalize(::glm::vec3(
-                    ::glm::cos(::glm::radians(0.0f)) * ::glm::cos(::glm::radians(0.0f))
-                    , ::glm::sin(::glm::radians(0.0f))
-                    , ::glm::sin(::glm::radians(0.0f)) * ::glm::cos(::glm::radians(0.0f))
-                ))
-            };
-            position->update(frameInfo.deltaTime, control, direction);
+
+        if (velocity) {
+            velocity->update(frameInfo.deltaTime, control);
+            position.update(control, velocity, direction);
+        } else {
+            position.update(frameInfo.deltaTime, control, direction);
         }
+        return;
+    }
+
+    if (velocity) {
+        ::xrn::OptRef<const ::glm::vec3> direction;
+        if (rotation) {
+            direction = rotation->getDirection();
+        } else {
+            direction = m_defaultDirection;
+        }
+
+        position.update(velocity, direction);
     }
 }

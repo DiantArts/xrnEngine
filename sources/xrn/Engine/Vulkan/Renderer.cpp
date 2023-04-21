@@ -91,7 +91,7 @@ auto ::xrn::engine::vulkan::Renderer::getCurrentCommandBuffer() const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-[[ nodiscard ]] auto ::xrn::engine::vulkan::Renderer::getFrameIndex() const
+auto ::xrn::engine::vulkan::Renderer::getFrameIndex() const
     -> int
 {
     XRN_SASSERT(this->isFrameInProgress(), "Cannot get frame index when frame is not in progress");
@@ -108,7 +108,7 @@ auto ::xrn::engine::vulkan::Renderer::getCurrentCommandBuffer() const
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
-[[ nodiscard ]] auto ::xrn::engine::vulkan::Renderer::beginFrame()
+auto ::xrn::engine::vulkan::Renderer::beginFrame()
     -> ::VkCommandBuffer
 {
     XRN_SASSERT(!this->isFrameInProgress(), "Cannot call beginFrame() while frame already in progress");
