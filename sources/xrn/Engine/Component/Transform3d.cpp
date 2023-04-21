@@ -71,7 +71,7 @@ void ::xrn::engine::component::Transform3d::updateMatrix(
     , const ::xrn::engine::component::Rotation& rotation
 )
 {
-    this->updateMatrix(position, rotation, ::glm::vec3{ 1.0f });
+    this->updateMatrix(position, rotation, ::xrn::engine::component::Scale{ 1.0f });
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -88,7 +88,11 @@ void ::xrn::engine::component::Transform3d::updateMatrix(
     const ::xrn::engine::component::Position& position
 )
 {
-    this->updateMatrix(position, ::xrn::engine::component::Rotation{ 0.0f }, ::xrn::engine::component::Scale{ 1.0f });
+    this->updateMatrix(
+        position
+        , ::xrn::engine::component::Rotation{ 0.0f }
+        , ::xrn::engine::component::Scale{ 1.0f }
+    );
 }
 
 ///////////////////////////////////////////////////////////////////////////
