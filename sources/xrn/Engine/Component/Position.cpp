@@ -26,12 +26,12 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ::xrn::engine::component::Position::Position(
-    const float positionX
-    , const float positionY
-    , const float positionZ
+    const float valueX
+    , const float valueY
+    , const float valueZ
 )
     : ::xrn::engine::component::detail::Vector3<Position>{
-        ::glm::vec3{ positionX, positionY, positionZ }
+        ::glm::vec3{ valueX, valueY, valueZ }
     }
 {}
 
@@ -224,63 +224,6 @@ auto ::xrn::engine::component::Position::moveDown(
 ) -> Position&
 {
     m_value.y += value.get();
-    this->setChangedFlag();
-
-    return *this;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Position::move(
-    const ::glm::vec3& offset
-) -> Position&
-{
-    m_value += offset;
-    this->setChangedFlag();
-
-    return *this;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Position::move(
-    const float offsetX
-    , const float offsetY
-    , const float offsetZ
-) -> Position&
-{
-    m_value += ::glm::vec3{ offsetX, offsetY, offsetZ };
-    this->setChangedFlag();
-
-    return *this;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Position::moveX(
-    const float offset
-) -> Position&
-{
-    m_value.x += offset;
-    this->setChangedFlag();
-
-    return *this;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Position::moveY(
-    const float offset
-) -> Position&
-{
-    m_value.y -= offset;
-    this->setChangedFlag();
-
-    return *this;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Position::moveZ(
-    const float offset
-) -> Position&
-{
-    m_value.z += offset;
     this->setChangedFlag();
 
     return *this;

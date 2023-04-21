@@ -37,10 +37,17 @@ template <
     m_value = ::glm::vec3{ value, value, value };
 
     auto& parent{ static_cast<Vector3::ParentType&>(*this) };
+
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
     }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value); }) {
+        parent.formatValue(m_value);
+    }
+
     return parent;
 }
 
@@ -57,10 +64,17 @@ template <
     m_value = ::glm::vec3{ valueX, valueY, valueZ };
 
     auto& parent{ static_cast<Vector3::ParentType&>(*this) };
+
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
     }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value); }) {
+        parent.formatValue(m_value);
+    }
+
     return parent;
 }
 
@@ -77,10 +91,20 @@ template <
     m_value.y = valueY;
 
     auto& parent{ static_cast<Vector3::ParentType&>(*this) };
+
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
     }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value.x); }) {
+        parent.formatValue(m_value.x);
+        parent.formatValue(m_value.y);
+    } else if constexpr (requires { parent.formatValue(m_value); }) {
+        parent.formatValue(m_value);
+    }
+
     return parent;
 }
 
@@ -97,10 +121,20 @@ template <
     m_value.z = valueZ;
 
     auto& parent{ static_cast<Vector3::ParentType&>(*this) };
+
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
     }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value.x); }) {
+        parent.formatValue(m_value.x);
+        parent.formatValue(m_value.z);
+    } else if constexpr (requires { parent.formatValue(m_value); }) {
+        parent.formatValue(m_value);
+    }
+
     return parent;
 }
 
@@ -117,10 +151,20 @@ template <
     m_value.z = valueZ;
 
     auto& parent{ static_cast<Vector3::ParentType&>(*this) };
+
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
     }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value.y); }) {
+        parent.formatValue(m_value.y);
+        parent.formatValue(m_value.z);
+    } else if constexpr (requires { parent.formatValue(m_value); }) {
+        parent.formatValue(m_value);
+    }
+
     return parent;
 }
 
@@ -243,6 +287,7 @@ template <
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
     }
+
     return parent;
 }
 
@@ -268,10 +313,17 @@ template <
     m_value += rhs;
 
     auto& parent{ static_cast<Vector3::ParentType&>(*this) };
+
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
     }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value); }) {
+        parent.formatValue(m_value);
+    }
+
     return parent;
 }
 
@@ -297,10 +349,17 @@ template <
     m_value -= rhs;
 
     auto& parent{ static_cast<Vector3::ParentType&>(*this) };
+
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
     }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value); }) {
+        parent.formatValue(m_value);
+    }
+
     return parent;
 }
 
@@ -326,10 +385,17 @@ template <
     m_value *= rhs;
 
     auto& parent{ static_cast<Vector3::ParentType&>(*this) };
+
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
     }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value); }) {
+        parent.formatValue(m_value);
+    }
+
     return parent;
 }
 
@@ -355,9 +421,16 @@ template <
     m_value /= rhs;
 
     auto& parent{ static_cast<Vector3::ParentType&>(*this) };
+
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
     }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value); }) {
+        parent.formatValue(m_value);
+    }
+
     return parent;
 }

@@ -15,29 +15,31 @@
 ///////////////////////////////////////////////////////////////////////////
 ///
 ///////////////////////////////////////////////////////////////////////////
-::xrn::engine::component::Rotation::Rotation() = default;
+::xrn::engine::component::Rotation::Rotation()
+    : ::xrn::engine::component::detail::Vector3<Rotation>{ ::glm::vec3{ 0.f, 0.f, 0.f } }
+{}
 
 ///////////////////////////////////////////////////////////////////////////
 ///
 ///////////////////////////////////////////////////////////////////////////
 ::xrn::engine::component::Rotation::Rotation(
-    ::glm::vec3 offset
+    ::glm::vec3 value
 )
-{
-    this->set(::std::move(offset));
-}
+    : ::xrn::engine::component::detail::Vector3<Rotation>{ ::std::move(value) }
+{}
 
 ///////////////////////////////////////////////////////////////////////////
 ///
 ///////////////////////////////////////////////////////////////////////////
 ::xrn::engine::component::Rotation::Rotation(
-    const float rotationXOffset
-    , const float rotationYOffset
-    , const float rotationZOffset
+    const float valueX
+    , const float valueY
+    , const float valueZ
 )
-{
-    this->rotate(rotationXOffset, rotationYOffset, rotationZOffset);
-}
+    : ::xrn::engine::component::detail::Vector3<Rotation>{
+        ::glm::vec3{ valueX, valueY, valueZ }
+    }
+{}
 
 
 
@@ -48,68 +50,14 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-
-///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Rotation::rotate(
-    const ::glm::vec3& offset
-)
-{
-    if (offset.x != 0) {
-        this->rotateX(offset.x);
-    }
-    if (offset.y != 0) {
-        this->rotateY(offset.y);
-    }
-    if (offset.z != 0) {
-        this->rotateZ(offset.z);
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Rotation::rotate(
-    const float rotationXOffset
-    , const float rotationYOffset
-)
-{
-    if (rotationXOffset != 0) {
-        this->rotateX(rotationXOffset);
-    }
-    if (rotationYOffset != 0) {
-        this->rotateY(rotationYOffset);
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Rotation::rotate(
-    const float rotationXOffset
-    , const float rotationYOffset
-    , const float rotationZOffset
-)
-{
-    if (rotationXOffset != 0) {
-        this->rotateX(rotationXOffset);
-    }
-    if (rotationYOffset != 0) {
-        this->rotateY(rotationYOffset);
-    }
-    if (rotationZOffset != 0) {
-        this->rotateZ(rotationZOffset);
-    }
-}
-
 ///////////////////////////////////////////////////////////////////////////
 void ::xrn::engine::component::Rotation::rotateX(
     const float offset
 )
 {
-    m_rotation.x += offset;
-    while (m_rotation.x >= 360) {
-        m_rotation.x -= 360;
-    }
-    while (m_rotation.x < 0) {
-        m_rotation.x += 360;
-    }
-    m_isChanged = true;
+    m_value.x += offset;
+    this->formatValue(m_value.x);
+    this->setChangedFlag();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -117,14 +65,9 @@ void ::xrn::engine::component::Rotation::rotateY(
     const float offset
 )
 {
-    m_rotation.y += offset;
-    while (m_rotation.y >= 360) {
-        m_rotation.y -= 360;
-    }
-    while (m_rotation.y < 0) {
-        m_rotation.y += 360;
-    }
-    m_isChanged = true;
+    m_value.y += offset;
+    this->formatValue(m_value.y);
+    this->setChangedFlag();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -132,14 +75,9 @@ void ::xrn::engine::component::Rotation::rotateZ(
     const float offset
 )
 {
-    m_rotation.z += offset;
-    while (m_rotation.z >= 360) {
-        m_rotation.z -= 360;
-    }
-    while (m_rotation.z < 0) {
-        m_rotation.z += 360;
-    }
-    m_isChanged = true;
+    m_value.z += offset;
+    this->formatValue(m_value.z);
+    this->setChangedFlag();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -147,187 +85,28 @@ void ::xrn::engine::component::Rotation::rotateXY(
     const float offset
 )
 {
-    m_rotation.x += offset;
-    while (m_rotation.x >= 360) {
-        m_rotation.x -= 360;
-    }
-    while (m_rotation.x < 0) {
-        m_rotation.x += 360;
-    }
-    while (m_rotation.y >= 360) {
-        m_rotation.y -= 360;
-    }
-    while (m_rotation.y < 0) {
-        m_rotation.y += 360;
-    }
-    m_isChanged = true;
+    m_value.x += offset;
+    m_value.y += offset;
+
+    this->formatValue(m_value.x);
+    this->formatValue(m_value.y);
+
+    this->setChangedFlag();
 }
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Rotation::set(
-    const ::glm::vec2& rotation
+void ::xrn::engine::component::Rotation::rotateXY(
+    const float offsetX
+    , const float offsetY
 )
 {
-    m_rotation.x = rotation.x;
-    m_rotation.y = rotation.y;
-    while (m_rotation.x >= 360) {
-        m_rotation.x -= 360;
-    }
-    while (m_rotation.x < 0) {
-        m_rotation.x += 360;
-    }
-    while (m_rotation.y >= 360) {
-        m_rotation.y -= 360;
-    }
-    while (m_rotation.y < 0) {
-        m_rotation.y += 360;
-    }
-    m_isChanged = true;
-}
+    m_value.x += offsetX;
+    m_value.y += offsetY;
 
-///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Rotation::set(
-    const ::glm::vec3& rotation
-)
-{
-    m_rotation = ::std::move(rotation);
-    while (m_rotation.x >= 360) {
-        m_rotation.x -= 360;
-    }
-    while (m_rotation.x < 0) {
-        m_rotation.x += 360;
-    }
-    while (m_rotation.y >= 360) {
-        m_rotation.y -= 360;
-    }
-    while (m_rotation.y < 0) {
-        m_rotation.y += 360;
-    }
-    while (m_rotation.z >= 360) {
-        m_rotation.z -= 360;
-    }
-    while (m_rotation.z < 0) {
-        m_rotation.z += 360;
-    }
-    m_isChanged = true;
-}
+    this->formatValue(m_value.x);
+    this->formatValue(m_value.y);
 
-///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Rotation::set(
-    const float rotationX
-    , const float rotationY
-)
-{
-    m_rotation.x = rotationX;
-    m_rotation.y = rotationY;
-    while (m_rotation.x >= 360) {
-        m_rotation.x -= 360;
-    }
-    while (m_rotation.x < 0) {
-        m_rotation.x += 360;
-    }
-    while (m_rotation.y >= 360) {
-        m_rotation.y -= 360;
-    }
-    while (m_rotation.y < 0) {
-        m_rotation.y += 360;
-    }
-    m_isChanged = true;
-}
-
-///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Rotation::set(
-    const float rotationX
-    , const float rotationY
-    , const float rotationZ
-)
-{
-    m_rotation = ::glm::vec3{ rotationX, rotationY, rotationZ };
-    while (m_rotation.x >= 360) {
-        m_rotation.x -= 360;
-    }
-    while (m_rotation.x < 0) {
-        m_rotation.x += 360;
-    }
-    while (m_rotation.y >= 360) {
-        m_rotation.y -= 360;
-    }
-    while (m_rotation.y < 0) {
-        m_rotation.y += 360;
-    }
-    while (m_rotation.z >= 360) {
-        m_rotation.z -= 360;
-    }
-    while (m_rotation.z < 0) {
-        m_rotation.z += 360;
-    }
-    m_isChanged = true;
-}
-
-///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Rotation::setX(
-    const float rotationX
-)
-{
-    m_rotation.x = rotationX;
-    while (m_rotation.x >= 360) {
-        m_rotation.x -= 360;
-    }
-    while (m_rotation.x < 0) {
-        m_rotation.x += 360;
-    }
-    m_isChanged = true;
-}
-
-///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Rotation::setY(
-    const float rotationY
-)
-{
-    m_rotation.y = rotationY;
-    while (m_rotation.y >= 360) {
-        m_rotation.y -= 360;
-    }
-    while (m_rotation.y < 0) {
-        m_rotation.y += 360;
-    }
-    m_isChanged = true;
-}
-
-///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Rotation::setZ(
-    const float rotationZ
-)
-{
-    m_rotation.y = rotationZ;
-    while (m_rotation.z >= 360) {
-        m_rotation.z -= 360;
-    }
-    while (m_rotation.z < 0) {
-        m_rotation.z += 360;
-    }
-    m_isChanged = true;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::getXY() const
-    -> ::glm::vec2
-{
-    return ::glm::vec2{ m_rotation.x, m_rotation.y };
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::get() const
-    -> const ::glm::vec3&
-{
-    return m_rotation;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::get()
-    -> ::glm::vec3&
-{
-    return m_rotation;
+    this->setChangedFlag();
 }
 
 
@@ -345,7 +124,7 @@ void ::xrn::engine::component::Rotation::updateDirection(
 )
 {
     if (control.isRotated() || this->isChanged()) {
-        auto newRotation{ m_rotation + control.getRotation() };
+        auto newRotation{ m_value + control.getRotation() };
 
         if (newRotation.y > ::xrn::engine::configuration.maxPitch) {
             newRotation.y = ::xrn::engine::configuration.maxPitch;
@@ -353,14 +132,16 @@ void ::xrn::engine::component::Rotation::updateDirection(
             newRotation.y = ::xrn::engine::configuration.minPitch;
         }
 
-        this->set(::std::move(newRotation));
+        ::xrn::engine::component::detail::BasicType<::glm::vec3, Rotation, true>::set(
+            ::std::move(newRotation)
+        );
         m_direction = ::glm::normalize(::glm::vec3(
-            ::glm::cos(::glm::radians(m_rotation.x)) * ::glm::cos(::glm::radians(m_rotation.y))
-            , ::glm::sin(::glm::radians(m_rotation.y))
-            , ::glm::sin(::glm::radians(m_rotation.x)) * ::glm::cos(::glm::radians(m_rotation.y))
+            ::glm::cos(::glm::radians(m_value.x)) * ::glm::cos(::glm::radians(m_value.y))
+            , ::glm::sin(::glm::radians(m_value.y))
+            , ::glm::sin(::glm::radians(m_value.x)) * ::glm::cos(::glm::radians(m_value.y))
         ));
         control.resetRotatedFlag();
-        m_isChanged = false;
+        this->setChangedFlag(false);
     }
 }
 
@@ -369,11 +150,11 @@ void ::xrn::engine::component::Rotation::updateDirection()
 {
     if (this->isChanged()) {
         m_direction = ::glm::normalize(::glm::vec3(
-            ::glm::cos(::glm::radians(m_rotation.x)) * ::glm::cos(::glm::radians(m_rotation.y))
-            , ::glm::sin(::glm::radians(m_rotation.y))
-            , ::glm::sin(::glm::radians(m_rotation.x)) * ::glm::cos(::glm::radians(m_rotation.y))
+            ::glm::cos(::glm::radians(m_value.x)) * ::glm::cos(::glm::radians(m_value.y))
+            , ::glm::sin(::glm::radians(m_value.y))
+            , ::glm::sin(::glm::radians(m_value.x)) * ::glm::cos(::glm::radians(m_value.y))
         ));
-        m_isChanged = false;
+        this->setChangedFlag(false);
     }
 }
 
@@ -388,241 +169,30 @@ auto ::xrn::engine::component::Rotation::getDirection() const
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
-// Changed flag
+// Format value
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::isChanged() const
-    -> bool
+void ::xrn::engine::component::Rotation::formatValue(
+    float& value
+)
 {
-    return m_isChanged;
-}
-
-///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Rotation::resetChangedFlag()
-{
-    m_isChanged = false;
-}
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-// Comparisons
-//
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator<=>(
-    const float other
-) const
-    -> ::std::partial_ordering
-{
-    if (auto cmp{ m_rotation.x <=> other }; cmp != 0) {
-        return cmp;
+    while (value >= 360) {
+        value -= 360;
     }
-    if (auto cmp{ m_rotation.y <=> other }; cmp != 0) {
-        return cmp;
+    while (value < 0) {
+        value += 360;
     }
-    return this->m_rotation.z <=> other;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator<=>(
-    const ::glm::vec3& other
-) const
-    -> ::std::partial_ordering
+void ::xrn::engine::component::Rotation::formatValue(
+    ::glm::vec3& value
+)
 {
-    if (auto cmp{ m_rotation.x <=> other.x }; cmp != 0) {
-        return cmp;
-    }
-    if (auto cmp{ m_rotation.y <=> other.y }; cmp != 0) {
-        return cmp;
-    }
-    return this->m_rotation.z <=> other.z;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator<=>(
-    const Rotation& other
-) const
-    -> ::std::partial_ordering
-{
-    if (auto cmp{ m_rotation.x <=> other.m_rotation.x }; cmp != 0) {
-        return cmp;
-    }
-    if (auto cmp{ m_rotation.y <=> other.m_rotation.y }; cmp != 0) {
-        return cmp;
-    }
-    return this->m_rotation.z <=> other.m_rotation.z;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator=(
-    const float rotation
-) -> Rotation&
-{
-    this->set(rotation, rotation, rotation);
-    return *this;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator=(
-    ::glm::vec3 rotation
-) -> Rotation&
-{
-    this->set(::std::move(rotation));
-    return *this;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator+(
-    const float rotation
-) -> ::glm::vec3
-{
-    return m_rotation + rotation;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator+(
-    ::glm::vec3 rotation
-) -> ::glm::vec3
-{
-    return m_rotation + rotation;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator+=(
-    const float rotation
-) -> Rotation&
-{
-    m_rotation += rotation;
-    return *this;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator+=(
-    ::glm::vec3 rotation
-) -> Rotation&
-{
-    m_rotation += rotation;
-    return *this;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator-(
-    const float rotation
-) -> ::glm::vec3
-{
-    return m_rotation - rotation;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator-(
-    ::glm::vec3 rotation
-) -> ::glm::vec3
-{
-    return m_rotation - rotation;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator-=(
-    const float rotation
-) -> Rotation&
-{
-    m_rotation -= rotation;
-    return *this;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator-=(
-    ::glm::vec3 rotation
-) -> Rotation&
-{
-    m_rotation -= rotation;
-    return *this;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator*(
-    const float rotation
-) -> ::glm::vec3
-{
-    return m_rotation * rotation;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator*(
-    ::glm::vec3 rotation
-) -> ::glm::vec3
-{
-    return m_rotation * rotation;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator*=(
-    const float rotation
-) -> Rotation&
-{
-    m_rotation *= rotation;
-    return *this;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator*=(
-    ::glm::vec3 rotation
-) -> Rotation&
-{
-    m_rotation *= rotation;
-    return *this;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator/(
-    const float rotation
-) -> ::glm::vec3
-{
-    return m_rotation / rotation;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator/(
-    ::glm::vec3 rotation
-) -> ::glm::vec3
-{
-    return m_rotation / rotation;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator/=(
-    const float rotation
-) -> Rotation&
-{
-    m_rotation /= rotation;
-    return *this;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator/=(
-    ::glm::vec3 rotation
-) -> Rotation&
-{
-    m_rotation /= rotation;
-    return *this;
-}
-
-///////////////////////////////////////////////////////////////////////////
-::xrn::engine::component::Rotation::operator const ::glm::vec3&() const
-{
-    return m_rotation;
-}
-
-///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Rotation::operator*()
-    -> ::glm::vec3&
-{
-    return m_rotation;
+    this->formatValue(value.x);
+    this->formatValue(value.y);
+    this->formatValue(value.z);
 }

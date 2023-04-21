@@ -39,10 +39,17 @@ template <
     m_value = ::std::move(value);
 
     auto& parent{ static_cast<BasicType::ParentType&>(*this) };
+
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
     }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value); }) {
+        parent.formatValue(m_value);
+    }
+
     return parent;
 }
 
@@ -104,10 +111,17 @@ template <
     this->set(rhs);
 
     auto& parent{ static_cast<BasicType::ParentType&>(*this) };
+
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
     }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value); }) {
+        parent.formatValue(m_value);
+    }
+
     return parent;
 }
 
@@ -135,10 +149,17 @@ template <
     m_value += rhs;
 
     auto& parent{ static_cast<BasicType::ParentType&>(*this) };
+
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
     }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value); }) {
+        parent.formatValue(m_value);
+    }
+
     return parent;
 }
 
@@ -166,10 +187,17 @@ template <
     m_value -= rhs;
 
     auto& parent{ static_cast<BasicType::ParentType&>(*this) };
+
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
     }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value); }) {
+        parent.formatValue(m_value);
+    }
+
     return parent;
 }
 
@@ -197,10 +225,17 @@ template <
     m_value *= rhs;
 
     auto& parent{ static_cast<BasicType::ParentType&>(*this) };
+
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
     }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value); }) {
+        parent.formatValue(m_value);
+    }
+
     return parent;
 }
 
@@ -228,10 +263,17 @@ template <
     m_value /= rhs;
 
     auto& parent{ static_cast<BasicType::ParentType&>(*this) };
+
     // set the changed flag if it exists
     if constexpr (requires { parent.setChangedFlag(true); }) {
         parent.setChangedFlag(true);
     }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value); }) {
+        parent.formatValue(m_value);
+    }
+
     return parent;
 }
 
