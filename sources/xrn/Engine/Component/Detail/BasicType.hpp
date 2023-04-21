@@ -182,7 +182,23 @@ protected:
 
 };
 
+#define USING_THIS_BASIC_TYPE(argType, argParentType, ...) \
+    using ::xrn::engine::component::detail::BasicType<argType, argParentType VA_ARGS(__VA_ARGS__)>
 
+#define EXPOSE_BASIC_TYPE_METHODS(argType, argParentType, ...) \
+    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::set; \
+    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::get; \
+    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator<=>; \
+    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator=; \
+    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator+; \
+    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator+=; \
+    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator-; \
+    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator-=; \
+    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator*; \
+    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator*=; \
+    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator/; \
+    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator/=; \
+    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::m_value
 
 ///////////////////////////////////////////////////////////////////////////
 /// \brief Adds the isChanged flag
@@ -206,6 +222,8 @@ public:
     //
     ///////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
+
+    EXPOSE_BASIC_TYPE_METHODS(T, U, false);
 
     using Type = typename BasicType<T, U, false>::Type;
     using ParentType = typename BasicType<T, U, false>::ParentType;

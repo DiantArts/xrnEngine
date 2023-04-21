@@ -27,6 +27,8 @@ public:
     ///////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
+    EXPOSE_BASIC_TYPE_METHODS(::glm::vec3, T, hasChangedFlag);
+
     using Type = ::glm::vec3;
     using ParentType = T;
 
@@ -242,22 +244,38 @@ public:
         float rhs
     ) -> Vector3::ParentType&;
 
-
-
-protected:
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    // Members
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-
-    using ::xrn::engine::component::detail::BasicType<::glm::vec3, T, hasChangedFlag>::m_value;
-
 };
 
 } // namespace xrn::engine::component::detail
+
+#define USING_THIS_VECTOR3(argParentType, ...) \
+    using ::xrn::engine::component::detail::Vector3<argParentType VA_ARGS(__VA_ARGS__)>
+
+#define EXPOSE_VECTOR3_METHODS(argParentType, ...) \
+    EXPOSE_BASIC_TYPE_METHODS(::glm::vec3, argParentType VA_ARGS(__VA_ARGS__)); \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::set; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::setX; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::setY; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::setZ; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::setXY; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::setXZ; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::setYZ; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::getX; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::getY; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::getZ; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::getXY; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::getXZ; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::getYZ; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator<=>; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator=; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator+; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator+=; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator-; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator-=; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator*; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator*=; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator/; \
+    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator/=
 
 ///////////////////////////////////////////////////////////////////////////
 // Header-implimentation

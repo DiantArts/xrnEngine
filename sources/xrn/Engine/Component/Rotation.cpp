@@ -132,9 +132,7 @@ void ::xrn::engine::component::Rotation::updateDirection(
             newRotation.y = ::xrn::engine::configuration.minPitch;
         }
 
-        ::xrn::engine::component::detail::BasicType<::glm::vec3, Rotation, true>::set(
-            ::std::move(newRotation)
-        );
+        this->set(::std::move(newRotation));
         m_direction = ::glm::normalize(::glm::vec3(
             ::glm::cos(::glm::radians(m_value.x)) * ::glm::cos(::glm::radians(m_value.y))
             , ::glm::sin(::glm::radians(m_value.y))
