@@ -10,6 +10,7 @@
 #include <xrn/Engine/Vulkan/Buffer.hpp>
 #include <xrn/Engine/Configuration.hpp>
 #include <xrn/Engine/Components.hpp>
+#include "xrn/Engine/System/UpdatePosition.hpp"
 
 
 
@@ -159,63 +160,62 @@ void ::xrn::engine::AScene::onSystemKeyPressed(
         return this->getWindow().close();
     }
 
-    if (m_isCameraDetached) {
-        if (
-            auto* playerController{ m_registry.try_get<::xrn::engine::component::Control>(m_player) };
-            playerController
-        ) {
-            // move
-            if (keyCode == ::xrn::engine::configuration.keyBinding.moveForward) {
-                playerController->startMovingForward();
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveBackward) {
-                playerController->startMovingBackward();
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveLeft) {
-                playerController->startMovingLeft();
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveRight) {
-                playerController->startMovingRight();
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveUp) {
-                playerController->startMovingUp();
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveDown) {
-                playerController->startMovingDown();
-                return;
+    return;
 
-            // move arrows
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveForward2) {
-                playerController->startMovingForward();
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveBackward2) {
-                playerController->startMovingBackward();
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveLeft2) {
-                playerController->startMovingLeft();
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveRight2) {
-                playerController->startMovingRight();
-                return;
+    if (
+        auto* playerController{ m_registry.try_get<::xrn::engine::component::Control>(m_player) };
+        playerController
+    ) {
+        // move
+        if (keyCode == ::xrn::engine::configuration.keyBinding.moveForward) {
+            playerController->startMovingForward();
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveBackward) {
+            playerController->startMovingBackward();
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveLeft) {
+            playerController->startMovingLeft();
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveRight) {
+            playerController->startMovingRight();
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveUp) {
+            playerController->startMovingUp();
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveDown) {
+            playerController->startMovingDown();
+            return;
 
-            // look
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookUp) {
-                playerController->rotateZ(-45 / 2);
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookDown) {
-                playerController->rotateZ(45 / 2);
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookLeft) {
-                playerController->rotateX(45 / 2);
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookRight) {
-                playerController->rotateX(-45 / 2);
-                return;
-            }
+        // move arrows
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveForward2) {
+            playerController->startMovingForward();
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveBackward2) {
+            playerController->startMovingBackward();
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveLeft2) {
+            playerController->startMovingLeft();
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveRight2) {
+            playerController->startMovingRight();
+            return;
+
+        // look
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookUp) {
+            playerController->rotateZ(-45 / 2);
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookDown) {
+            playerController->rotateZ(45 / 2);
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookLeft) {
+            playerController->rotateX(45 / 2);
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookRight) {
+            playerController->rotateX(-45 / 2);
+            return;
         }
-    } else {
-        return this->onKeyPressed(keyCode);
     }
+    return this->onKeyPressed(keyCode);
 
     XRN_INFO("Key ({}) is not bound to press", keyCode);
 }
@@ -225,59 +225,57 @@ void ::xrn::engine::AScene::onSystemKeyReleased(
     ::std::int16_t keyCode
 )
 {
-    if (m_isCameraDetached) {
-        if (
-            auto* playerController{ m_registry.try_get<::xrn::engine::component::Control>(m_player) };
-            playerController
-        ) {
-            // move
-            if (keyCode == ::xrn::engine::configuration.keyBinding.moveForward) {
-                playerController->stopMovingForward();
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveBackward) {
-                playerController->stopMovingBackward();
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveLeft) {
-                playerController->stopMovingLeft();
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveRight) {
-                playerController->stopMovingRight();
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveUp) {
-                playerController->stopMovingUp();
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveDown) {
-                playerController->stopMovingDown();
-                return;
+    return;
+    if (
+        auto* playerController{ m_registry.try_get<::xrn::engine::component::Control>(m_player) };
+        playerController
+    ) {
+        // move
+        if (keyCode == ::xrn::engine::configuration.keyBinding.moveForward) {
+            playerController->stopMovingForward();
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveBackward) {
+            playerController->stopMovingBackward();
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveLeft) {
+            playerController->stopMovingLeft();
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveRight) {
+            playerController->stopMovingRight();
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveUp) {
+            playerController->stopMovingUp();
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveDown) {
+            playerController->stopMovingDown();
+            return;
 
-            // move arrows
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveForward2) {
-                playerController->stopMovingForward();
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveBackward2) {
-                playerController->stopMovingBackward();
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveLeft2) {
-                playerController->stopMovingLeft();
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveRight2) {
-                playerController->stopMovingRight();
-                return;
+        // move arrows
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveForward2) {
+            playerController->stopMovingForward();
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveBackward2) {
+            playerController->stopMovingBackward();
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveLeft2) {
+            playerController->stopMovingLeft();
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveRight2) {
+            playerController->stopMovingRight();
+            return;
 
-            // look
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookUp) {
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookDown) {
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookLeft) {
-                return;
-            } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookRight) {
-                return;
-            }
+        // look
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookUp) {
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookDown) {
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookLeft) {
+            return;
+        } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookRight) {
+            return;
         }
-    } else {
-        return this->onKeyReleased(keyCode);
     }
+    return this->onKeyReleased(keyCode);
 
     XRN_INFO("Key ({}) is not bound to press", keyCode);
 }
@@ -289,13 +287,14 @@ void ::xrn::engine::AScene::onSystemMouseMoved(
 {
     m_mousePointer.updateRay(m_camera, m_window);
 
+    return;
     if (m_isCameraDetached) {
         if (
             auto* playerController{ m_registry.try_get<::xrn::engine::component::Control>(m_player) };
             playerController
         ) {
-            // playerController->rotateX(-offset.x);
-            // playerController->rotateY(offset.y);
+            playerController->rotateX(-offset.x);
+            playerController->rotateY(offset.y);
         }
     } else {
         this->onMouseMoved(offset);
@@ -423,11 +422,13 @@ auto ::xrn::engine::AScene::update()
     using Position = ::xrn::engine::component::Position;
     using Rotation = ::xrn::engine::component::Rotation;
     using Scale = ::xrn::engine::component::Scale;
+    using Velocity = ::xrn::engine::component::Velocity;
+    using Acceleration = ::xrn::engine::component::Acceleration;
+    using Mass = ::xrn::engine::component::Mass;
+
     using Transform3d = ::xrn::engine::component::Transform3d;
     using PointLight = ::xrn::engine::component::PointLight;
     using Control = ::xrn::engine::component::Control;
-    using Velocity = ::xrn::engine::component::Velocity;
-    using Acceleration = ::xrn::engine::component::Acceleration;
 
     this->updateCamera();
 
@@ -436,8 +437,14 @@ auto ::xrn::engine::AScene::update()
         auto* rotation{ m_registry.try_get<Rotation>(entity) };
         auto* velocity{ m_registry.try_get<Velocity>(entity) };
         auto* acceleration{ m_registry.try_get<Acceleration>(entity) };
+        auto* mass{ m_registry.try_get<Mass>(entity) };
         auto* control{ m_registry.try_get<Control>(entity) };
-        m_updatePosition(m_frameInfo, position, control, rotation, velocity, acceleration);
+
+        if (control) {
+            m_updatePosition(m_frameInfo, position, *control, rotation, velocity, acceleration, mass);
+        } else {
+            m_updatePosition(m_frameInfo, position, rotation, velocity, acceleration, mass);
+        }
     }
 
     // transform (apply position rotation scale)
@@ -461,7 +468,7 @@ auto ::xrn::engine::AScene::update()
     {
         auto& position{ m_registry.get<Position>(m_camera.getId()) };
         auto& rotation{ m_registry.get<Rotation>(m_camera.getId()) };
-        m_camera.setViewDirection(position, rotation.getDirection());
+        m_camera.setViewDirection(*position, rotation.getDirection());
     }
     return true;
 }

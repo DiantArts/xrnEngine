@@ -13,12 +13,48 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ::xrn::engine::component::Acceleration::Acceleration()
-    : ::xrn::engine::component::detail::BasicType<float, Acceleration>{ 0.f }
+    : ::xrn::engine::component::detail::Vector3<Acceleration>{ ::glm::vec3{ 0.f, 0.f, 0.f } }
 {}
 
 ///////////////////////////////////////////////////////////////////////////
 ::xrn::engine::component::Acceleration::Acceleration(
     const float value
 )
-    : ::xrn::engine::component::detail::BasicType<float, Acceleration>{ value }
+    : ::xrn::engine::component::detail::Vector3<Acceleration>{ ::glm::vec3{ value, value, value } }
 {}
+
+///////////////////////////////////////////////////////////////////////////
+::xrn::engine::component::Acceleration::Acceleration(
+    ::glm::vec3 value
+)
+    : ::xrn::engine::component::detail::Vector3<Acceleration>{ ::std::move(value) }
+{}
+
+///////////////////////////////////////////////////////////////////////////
+::xrn::engine::component::Acceleration::Acceleration(
+    const float valueX
+    , const float valueY
+    , const float valueZ
+)
+    : ::xrn::engine::component::detail::Vector3<Acceleration>{
+        ::glm::vec3{ valueX, valueY, valueZ }
+    }
+{}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+// Update
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Acceleration::addForce(
+    const ::glm::vec3& force
+) -> Acceleration&
+{
+    this->add(force);
+    return *this;
+}

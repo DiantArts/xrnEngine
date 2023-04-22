@@ -93,6 +93,32 @@ template <
     typename T
     , typename U
     , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::BasicType<T, U, hasChangedFlag>::add(
+    const BasicType::Type& value
+) -> BasicType::ParentType&
+{
+    m_value += value;
+
+    auto& parent{ static_cast<BasicType::ParentType&>(*this) };
+
+    // set the changed flag if it exists
+    if constexpr (requires { parent.setChangedFlag(true); }) {
+        parent.setChangedFlag(true);
+    }
+
+    // format the value if method is provided
+    if constexpr (requires { parent.formatValue(m_value); }) {
+        parent.formatValue(m_value);
+    }
+
+    return parent;
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , typename U
+    , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::BasicType<T, U, hasChangedFlag>::get() const
     -> const BasicType::Type&
 {
@@ -314,16 +340,6 @@ template <
     }
 
     return parent;
-}
-
-///////////////////////////////////////////////////////////////////////////
-template <
-    typename T
-    , typename U
-    , bool hasChangedFlag
-> ::xrn::engine::component::detail::BasicType<T, U, hasChangedFlag>::operator const BasicType::Type&() const
-{
-    return m_value;
 }
 
 ///////////////////////////////////////////////////////////////////////////

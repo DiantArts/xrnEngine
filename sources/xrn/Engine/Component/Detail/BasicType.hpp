@@ -115,6 +115,13 @@ public:
     ///////////////////////////////////////////////////////////////////////////
     ///
     ///////////////////////////////////////////////////////////////////////////
+    auto add(
+        const BasicType::Type& value
+    ) -> BasicType::ParentType&;
+
+    ///////////////////////////////////////////////////////////////////////////
+    ///
+    ///////////////////////////////////////////////////////////////////////////
     [[ nodiscard ]] auto get() const
         -> const BasicType::Type&;
 
@@ -213,17 +220,12 @@ public:
     ///////////////////////////////////////////////////////////////////////////
     ///
     ///////////////////////////////////////////////////////////////////////////
-    [[ nodiscard ]] operator const BasicType::Type&() const;
-
-    ///////////////////////////////////////////////////////////////////////////
-    ///
-    ///////////////////////////////////////////////////////////////////////////
     [[ nodiscard ]] auto operator*() const
         -> const BasicType::Type&;
 
 
 
-protected:
+private:
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -241,6 +243,7 @@ protected:
 
 #define EXPOSE_BASIC_TYPE_METHODS(argType, argParentType, ...) \
     USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::set; \
+    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::add; \
     USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::get; \
     USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator<=>; \
     USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator=; \
@@ -251,8 +254,7 @@ protected:
     USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator*; \
     USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator*=; \
     USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator/; \
-    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator/=; \
-    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::m_value
+    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator/=
 
 ///////////////////////////////////////////////////////////////////////////
 /// \brief Adds the isChanged flag

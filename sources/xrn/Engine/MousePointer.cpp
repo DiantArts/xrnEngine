@@ -92,6 +92,6 @@ auto ::xrn::engine::MousePointer::castToPlane(
         return ::glm::normalize(::glm::vec3{ rotationMatrix * ::glm::vec4{ 0, 0, 1, 0 } });
     } };
     ::glm::vec3 planeNormal{ normalizePlane(planeRotation) };
-    auto t{ (::glm::dot(planeNormal, cameraPosition.get()) - ::glm::dot(planeNormal, planePosition)) / ::glm::dot(planeNormal, m_ray) };
-    return cameraPosition.get() + t * m_ray;
+    auto t{ (::glm::dot(planeNormal, *cameraPosition) - ::glm::dot(planeNormal, planePosition)) / ::glm::dot(planeNormal, m_ray) };
+    return *cameraPosition + t * m_ray;
 }

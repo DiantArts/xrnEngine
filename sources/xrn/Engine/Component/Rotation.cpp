@@ -46,74 +46,6 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
-// Rotation
-//
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Rotation::rotateX(
-    const float offset
-)
-{
-    m_value.x += offset;
-    this->formatValue(m_value.x);
-    this->setChangedFlag();
-}
-
-///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Rotation::rotateY(
-    const float offset
-)
-{
-    m_value.y += offset;
-    this->formatValue(m_value.y);
-    this->setChangedFlag();
-}
-
-///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Rotation::rotateZ(
-    const float offset
-)
-{
-    m_value.z += offset;
-    this->formatValue(m_value.z);
-    this->setChangedFlag();
-}
-
-///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Rotation::rotateXY(
-    const float offset
-)
-{
-    m_value.x += offset;
-    m_value.y += offset;
-
-    this->formatValue(m_value.x);
-    this->formatValue(m_value.y);
-
-    this->setChangedFlag();
-}
-
-///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Rotation::rotateXY(
-    const float offsetX
-    , const float offsetY
-)
-{
-    m_value.x += offsetX;
-    m_value.y += offsetY;
-
-    this->formatValue(m_value.x);
-    this->formatValue(m_value.y);
-
-    this->setChangedFlag();
-}
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
 // Direction
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,7 +57,7 @@ void ::xrn::engine::component::Rotation::updateDirection(
 )
 {
     if (control.isRotated() || this->isChanged()) {
-        auto newRotation{ m_value + control.getRotation() };
+        auto newRotation{ this->get() + control.getRotation() };
 
         if (newRotation.y > ::xrn::engine::configuration.maxPitch) {
             newRotation.y = ::xrn::engine::configuration.maxPitch;
@@ -135,9 +67,9 @@ void ::xrn::engine::component::Rotation::updateDirection(
 
         this->set(::std::move(newRotation));
         m_direction = ::glm::normalize(::glm::vec3(
-            ::glm::cos(::glm::radians(m_value.x)) * ::glm::cos(::glm::radians(m_value.y))
-            , ::glm::sin(::glm::radians(m_value.y))
-            , ::glm::sin(::glm::radians(m_value.x)) * ::glm::cos(::glm::radians(m_value.y))
+            ::glm::cos(::glm::radians(this->getX())) * ::glm::cos(::glm::radians(this->getY()))
+            , ::glm::sin(::glm::radians(this->getY()))
+            , ::glm::sin(::glm::radians(this->getX())) * ::glm::cos(::glm::radians(this->getY()))
         ));
         control.resetRotatedFlag();
         this->setChangedFlag(false);
@@ -149,9 +81,9 @@ void ::xrn::engine::component::Rotation::updateDirection()
 {
     if (this->isChanged()) {
         m_direction = ::glm::normalize(::glm::vec3(
-            ::glm::cos(::glm::radians(m_value.x)) * ::glm::cos(::glm::radians(m_value.y))
-            , ::glm::sin(::glm::radians(m_value.y))
-            , ::glm::sin(::glm::radians(m_value.x)) * ::glm::cos(::glm::radians(m_value.y))
+            ::glm::cos(::glm::radians(this->getX())) * ::glm::cos(::glm::radians(this->getY()))
+            , ::glm::sin(::glm::radians(this->getY()))
+            , ::glm::sin(::glm::radians(this->getX())) * ::glm::cos(::glm::radians(this->getY()))
         ));
         this->setChangedFlag(false);
     }

@@ -66,6 +66,20 @@ inline auto operator<<(
     return os;
 }
 
+template <> struct fmt::formatter<::glm::vec3> {
+    constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()){ return ctx.begin(); }
+    template <typename FormatContext> auto format(const ::glm::vec3& vec, FormatContext& ctx) -> decltype(ctx.out()){
+        return format_to( ctx.out(), "::glm::vec3{}{}, {}, {}{}", '{', vec.x, vec.y, vec.z, '}');
+    }
+};
+
+template <> struct fmt::formatter<::glm::vec2> {
+    constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()){ return ctx.begin(); }
+    template <typename FormatContext> auto format(const ::glm::vec2& vec, FormatContext& ctx) -> decltype(ctx.out()){
+        return format_to( ctx.out(), "::glm::vec2{}{}, {}{}", '{', vec.x, vec.y, '}');
+    }
+};
+
 template <
     typename T
 > auto operator<<(
