@@ -78,7 +78,7 @@ void ::xrn::engine::system::UpdatePosition::operator()(
     , ::xrn::OptRef<const ::xrn::engine::component::Mass> mass
 ) const
 {
-    XRN_THROW("Control is not supported")
+    XRN_THROW("Control not supported anymore")
     // ::xrn::OptRef<const ::glm::vec3> direction;
     // if (rotation) {
         // rotation->updateDirection(control);
@@ -123,7 +123,6 @@ void ::xrn::engine::system::UpdatePosition::updatePosition(
 {
     if (velocity) {
         // velocity->updateDirection(direction);
-
         if (acceleration) {
             if (mass && mass->get() != 0.f) {
                 acceleration->addForce(mass->get() * m_gravity);
@@ -132,7 +131,7 @@ void ::xrn::engine::system::UpdatePosition::updatePosition(
                 velocity->applyAcceleration(frameInfo.deltaTime, acceleration);
             }
         }
-
+        velocity->setLength(velocity->getMaximumSpeed());
         position.update(frameInfo.deltaTime, velocity);
     }
 }

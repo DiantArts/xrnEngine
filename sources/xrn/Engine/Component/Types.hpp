@@ -11,3 +11,5 @@
 #include <xrn/Engine/Component/Transform3d.hpp>
 
 #include <xrn/Engine/Component/PointLight.hpp>
+
+#include <xrn/Engine/Component/Vector3.hpp>

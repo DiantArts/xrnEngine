@@ -411,9 +411,7 @@ template <
     -> BasicType::ParentType&
 {
     m_isChanged = false;
-
-    auto& parent{ static_cast<BasicType::ParentType&>(*this) };
-    return parent;
+    return static_cast<BasicType::ParentType&>(*this);
 }
 
 

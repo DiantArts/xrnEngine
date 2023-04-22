@@ -305,6 +305,8 @@ private:
     ::std::vector<::VkDescriptorSet> m_descriptorSets{ ::xrn::engine::vulkan::SwapChain::MAX_FRAMES_IN_FLIGHT };
     ::xrn::engine::vulkan::FrameInfo m_frameInfo;
 
+    bool m_disableTick{ false };
+
     ::std::vector<::std::unique_ptr<::xrn::engine::vulkan::Buffer>> m_uboBuffers;
     ::xrn::engine::vulkan::Renderer m_renderer{ m_window, m_device };
 

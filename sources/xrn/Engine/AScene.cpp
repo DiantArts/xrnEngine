@@ -118,6 +118,8 @@ auto ::xrn::engine::AScene::onTick(
     ::xrn::Time deltaTime [[ maybe_unused ]]
 ) -> bool
 {
+    m_disableTick = true;
+    XRN_NOTE("AScene::onTick has been disabled");
     return true;
 }
 
@@ -159,8 +161,6 @@ void ::xrn::engine::AScene::onSystemKeyPressed(
     if (keyCode == ::xrn::engine::configuration.keyBinding.closeWindow) {
         return this->getWindow().close();
     }
-
-    return;
 
     if (
         auto* playerController{ m_registry.try_get<::xrn::engine::component::Control>(m_player) };
@@ -225,7 +225,6 @@ void ::xrn::engine::AScene::onSystemKeyReleased(
     ::std::int16_t keyCode
 )
 {
-    return;
     if (
         auto* playerController{ m_registry.try_get<::xrn::engine::component::Control>(m_player) };
         playerController
@@ -399,7 +398,7 @@ void ::xrn::engine::AScene::run()
             break;
         }
 
-        if (m_tickClock.getElapsed() >= m_tickFrequencyTime) {
+        if (!m_disableTick && m_tickClock.getElapsed() >= m_tickFrequencyTime) {
             if (!this->onTick(m_tickClock.restart())) {
                 m_window.close();
                 break;

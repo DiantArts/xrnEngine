@@ -191,6 +191,33 @@ template <
 template <
     typename T
     , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::setMagnitude(
+    const float value
+) -> Vector3::ParentType&
+{
+
+    return this->set(this->get() * (value / ::glm::length(this->get())));
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::setLength(
+    const float value
+) -> Vector3::ParentType&
+{
+    if (::glm::length(this->get()) > value) {
+        return this->set(::glm::normalize(this->get()) * value);
+    } else {
+        return static_cast<Vector3::ParentType&>(*this);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::add(
     const float value
 ) -> Vector3::ParentType&
@@ -448,7 +475,7 @@ template <
     const float rhs
 ) -> Vector3::ParentType&
 {
-    return this->add(rhs);
+    return this->set(this->get() + rhs);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -470,7 +497,7 @@ template <
     const float rhs
 ) -> Vector3::ParentType&
 {
-    return this->add(rhs);
+    return this->set(this->get() - rhs);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -492,7 +519,7 @@ template <
     const float rhs
 ) -> Vector3::ParentType&
 {
-    return this->add(rhs);
+    return this->set(this->get() * rhs);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -514,5 +541,5 @@ template <
     const float rhs
 ) -> Vector3::ParentType&
 {
-    return this->add(rhs);
+    return this->set(this->get() / rhs);
 }
