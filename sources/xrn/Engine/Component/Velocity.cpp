@@ -2,6 +2,9 @@
 #include <pch.hpp>
 #include <xrn/Engine/Component/Velocity.hpp>
 #include <xrn/Engine/Component/Control.hpp>
+#include <xrn/Engine/Component/Mass.hpp>
+#include <xrn/Engine/Component/Acceleration.hpp>
+#include <xrn/Engine/Component/Direction.hpp>
 
 
 
@@ -52,57 +55,27 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Velocity::update(
-    const ::xrn::engine::component::Control& control
+auto ::xrn::engine::component::Velocity::updateDirection(
+    const ::xrn::engine::component::Direction& direction
 ) -> Velocity&
 {
-    // search the number of directions moving in and removing speed when multiple direction at once
-    // auto speedDirectionDivider{ 2.f };
-
-    // bot top
-    // if (control.isAbleToFly()) {
-        // if (control.isMovingUp()) {
-            // if (!control.isMovingDown()) {
-                // speedDirectionDivider /= 1.5f;
-            // }
-        // } else if (control.isMovingDown()) {
-            // speedDirectionDivider /= 1.5f;
-        // }
-    // }
-
-    // left right
-    // if (control.isMovingLeft()) {
-        // if (!control.isMovingRight()) {
-            // speedDirectionDivider /= 1.5f;
-        // }
-    // } else if (control.isMovingRight()) {
-        // speedDirectionDivider /= 1.5f;
-    // }
-
-    // forward backward
-    // if (speedDirectionDivider > 1.f) {
-        // if (control.isMovingForward()) {
-            // if (!control.isMovingBackward()) {
-                // speedDirectionDivider /= 1.5f;
-            // }
-        // } else if (control.isMovingBackward()) {
-            // speedDirectionDivider /= 1.5f;
-        // } else if (speedDirectionDivider == 2.f) {
-            // return *this; // not any direction
-        // }
-    // }
-
-    // apply movement
-    // m_value =  control.getSpeed() * speedDirectionDivider / 100'000;
-    return *this;
+    return this->set(::glm::length(this->get()) * ::glm::normalize(*direction));
 }
 
 ///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Velocity::updateDirection(
-    const ::glm::vec3& direction
+auto ::xrn::engine::component::Velocity::applyAcceleration(
+    const ::xrn::engine::component::Acceleration& acceleration
 ) -> Velocity&
 {
-    return this->set(::glm::length(this->get()) * ::glm::normalize(direction));
+    return this->add(*acceleration);
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Velocity::removeAcceleration(
+    const ::xrn::engine::component::Acceleration& acceleration
+) -> Velocity&
+{
+    return this->set(this->get() - *acceleration);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -126,65 +99,6 @@ auto ::xrn::engine::component::Velocity::applyAcceleration(
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-// Update
-//
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////
-// auto ::xrn::engine::component::Velocity::updateForward(
-    // const ::glm::vec3& direction
-// ) -> Velocity&
-// {
-    // return this->add(direction);
-// }
-
-///////////////////////////////////////////////////////////////////////////
-// auto ::xrn::engine::component::Velocity::updateBackward(
-    // const ::glm::vec3& direction
-// ) -> Velocity&
-// {
-    // return this->add(-direction);
-// }
-
-///////////////////////////////////////////////////////////////////////////
-// auto ::xrn::engine::component::Velocity::updateRight(
-    // const ::glm::vec3& direction
-// ) -> Velocity&
-// {
-    // return this->add(-::glm::normalize(::glm::cross(direction, ::glm::vec3{ 0.f, 1.f, 0.f })));
-// }
-
-///////////////////////////////////////////////////////////////////////////
-// auto ::xrn::engine::component::Velocity::updateLeft(
-    // const ::glm::vec3& direction
-// ) -> Velocity&
-// {
-    // return this->add(::glm::normalize(::glm::cross(direction, ::glm::vec3{ 0.f, 1.f, 0.f })));
-// }
-
-///////////////////////////////////////////////////////////////////////////
-// auto ::xrn::engine::component::Velocity::updateUp(
-    // const ::glm::vec3& direction [[ maybe_unused ]]
-// ) -> Velocity&
-// {
-    // m_value.y -= velocity.getY() * deltaTime.getAsSeconds();
-    // return this->add(-::glm::normalize(::glm::cross(direction, ::glm::vec3{ 0.f, 0.f, 1.f })));
-// }
-
-///////////////////////////////////////////////////////////////////////////
-// auto ::xrn::engine::component::Velocity::updateDown(
-    // const ::glm::vec3& direction [[ maybe_unused ]]
-// ) -> Velocity&
-// {
-    // m_value.y += velocity.getY() * deltaTime.getAsSeconds();
-    // return this->add(::glm::normalize(::glm::cross(direction, ::glm::vec3{ 0.f, 0.f, 1.f })));
-// }
-
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,8 +108,6 @@ auto ::xrn::engine::component::Velocity::applyAcceleration(
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
-///
-///////////////////////////////////////////////////////////////////////////
 auto ::xrn::engine::component::Velocity::setMaximumSpeed(
     float value
 ) -> Velocity&
@@ -204,8 +116,6 @@ auto ::xrn::engine::component::Velocity::setMaximumSpeed(
     return *this;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///
 ///////////////////////////////////////////////////////////////////////////
 auto ::xrn::engine::component::Velocity::getMaximumSpeed() const
     -> float

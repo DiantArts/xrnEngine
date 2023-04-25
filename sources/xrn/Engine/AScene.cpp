@@ -10,7 +10,6 @@
 #include <xrn/Engine/Vulkan/Buffer.hpp>
 #include <xrn/Engine/Configuration.hpp>
 #include <xrn/Engine/Components.hpp>
-#include "xrn/Engine/System/UpdatePosition.hpp"
 
 
 
@@ -163,55 +162,60 @@ void ::xrn::engine::AScene::onSystemKeyPressed(
     }
 
     if (
-        auto* playerController{ m_registry.try_get<::xrn::engine::component::Control>(m_player) };
-        playerController
+        auto* control{ m_registry.try_get<::xrn::engine::component::Control>(m_player) };
+        control
     ) {
+        auto* direction{ m_registry.try_get<::xrn::engine::component::Direction>(m_player) };
+        XRN_SASSERT(direction, "controlled actor needs a direction component");
+        auto* velocity{ m_registry.try_get<::xrn::engine::component::Velocity>(m_player) };
+        XRN_SASSERT(velocity, "controlled actor needs a velocity component");
+
         // move
         if (keyCode == ::xrn::engine::configuration.keyBinding.moveForward) {
-            playerController->startMovingForward();
+            control->startMovingForward(*direction, *velocity);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveBackward) {
-            playerController->startMovingBackward();
+            control->startMovingBackward(*direction, *velocity);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveLeft) {
-            playerController->startMovingLeft();
+            control->startMovingLeft(*direction, *velocity);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveRight) {
-            playerController->startMovingRight();
+            control->startMovingRight(*direction, *velocity);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveUp) {
-            playerController->startMovingUp();
+            control->startMovingUp(*direction, *velocity);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveDown) {
-            playerController->startMovingDown();
+            control->startMovingDown(*direction, *velocity);
             return;
 
         // move arrows
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveForward2) {
-            playerController->startMovingForward();
+            control->startMovingForward(*direction, *velocity);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveBackward2) {
-            playerController->startMovingBackward();
+            control->startMovingBackward(*direction, *velocity);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveLeft2) {
-            playerController->startMovingLeft();
+            control->startMovingLeft(*direction, *velocity);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveRight2) {
-            playerController->startMovingRight();
+            control->startMovingRight(*direction, *velocity);
             return;
 
         // look
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookUp) {
-            playerController->rotateZ(-45 / 2);
+            control->rotateZ(-45 / 2);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookDown) {
-            playerController->rotateZ(45 / 2);
+            control->rotateZ(45 / 2);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookLeft) {
-            playerController->rotateX(45 / 2);
+            control->rotateX(45 / 2);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.lookRight) {
-            playerController->rotateX(-45 / 2);
+            control->rotateX(-45 / 2);
             return;
         }
     }
@@ -226,41 +230,46 @@ void ::xrn::engine::AScene::onSystemKeyReleased(
 )
 {
     if (
-        auto* playerController{ m_registry.try_get<::xrn::engine::component::Control>(m_player) };
-        playerController
+        auto* control{ m_registry.try_get<::xrn::engine::component::Control>(m_player) };
+        control
     ) {
+        auto* direction{ m_registry.try_get<::xrn::engine::component::Direction>(m_player) };
+        XRN_SASSERT(direction, "controlled actor needs a direction component");
+        auto* velocity{ m_registry.try_get<::xrn::engine::component::Velocity>(m_player) };
+        XRN_SASSERT(velocity, "controlled actor needs a velocity component");
+
         // move
         if (keyCode == ::xrn::engine::configuration.keyBinding.moveForward) {
-            playerController->stopMovingForward();
+            control->stopMovingForward(*direction, *velocity);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveBackward) {
-            playerController->stopMovingBackward();
+            control->stopMovingBackward(*direction, *velocity);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveLeft) {
-            playerController->stopMovingLeft();
+            control->stopMovingLeft(*direction, *velocity);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveRight) {
-            playerController->stopMovingRight();
+            control->stopMovingRight(*direction, *velocity);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveUp) {
-            playerController->stopMovingUp();
+            control->stopMovingUp(*direction, *velocity);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveDown) {
-            playerController->stopMovingDown();
+            control->stopMovingDown(*direction, *velocity);
             return;
 
         // move arrows
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveForward2) {
-            playerController->stopMovingForward();
+            control->stopMovingForward(*direction, *velocity);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveBackward2) {
-            playerController->stopMovingBackward();
+            control->stopMovingBackward(*direction, *velocity);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveLeft2) {
-            playerController->stopMovingLeft();
+            control->stopMovingLeft(*direction, *velocity);
             return;
         } else if (keyCode == ::xrn::engine::configuration.keyBinding.moveRight2) {
-            playerController->stopMovingRight();
+            control->stopMovingRight(*direction, *velocity);
             return;
 
         // look
@@ -289,15 +298,20 @@ void ::xrn::engine::AScene::onSystemMouseMoved(
     return;
     if (m_isCameraDetached) {
         if (
-            auto* playerController{ m_registry.try_get<::xrn::engine::component::Control>(m_player) };
-            playerController
+            auto* control{ m_registry.try_get<::xrn::engine::component::Control>(m_player) };
+            control
         ) {
-            playerController->rotateX(-offset.x);
-            playerController->rotateY(offset.y);
+            auto* direction{ m_registry.try_get<::xrn::engine::component::Direction>(m_player) };
+            XRN_SASSERT(direction, "controlled actor needs a direction component");
+            auto* velocity{ m_registry.try_get<::xrn::engine::component::Velocity>(m_player) };
+            XRN_SASSERT(velocity, "controlled actor needs a velocity component");
+            control->rotateX(-offset.x);
+            control->rotateY(offset.y);
+            ::fmt::print("{}\n", *control->getRotation());
+            return;
         }
-    } else {
-        this->onMouseMoved(offset);
     }
+    this->onMouseMoved(offset);
 }
 
 
@@ -420,6 +434,7 @@ auto ::xrn::engine::AScene::update()
 {
     using Position = ::xrn::engine::component::Position;
     using Rotation = ::xrn::engine::component::Rotation;
+    using Direction = ::xrn::engine::component::Direction;
     using Scale = ::xrn::engine::component::Scale;
     using Velocity = ::xrn::engine::component::Velocity;
     using Acceleration = ::xrn::engine::component::Acceleration;
@@ -431,19 +446,25 @@ auto ::xrn::engine::AScene::update()
 
     this->updateCamera();
 
+    // update direction
+    for (auto [entity, rotation, direction] : m_registry.view<Rotation, Direction>().each()) {
+        auto* control{ m_registry.try_get<Control>(entity) };
+        if (control && control->isRotated()) {
+            ::fmt::print("{}\n", *control->getRotation());
+            rotation.update(*control);
+            direction = rotation.getDirection();
+        } else if (rotation.isChanged()) {
+            direction = rotation.getDirection();
+        }
+    }
+
     // control
-    for (auto [entity, position] : m_registry.view<Position>().each()) {
-        auto* rotation{ m_registry.try_get<Rotation>(entity) };
-        auto* velocity{ m_registry.try_get<Velocity>(entity) };
+    for (auto [entity, position, velocity] : m_registry.view<Position, Velocity>().each()) {
         auto* acceleration{ m_registry.try_get<Acceleration>(entity) };
         auto* mass{ m_registry.try_get<Mass>(entity) };
         auto* control{ m_registry.try_get<Control>(entity) };
 
-        if (control) {
-            m_updatePosition(m_frameInfo, position, *control, rotation, velocity, acceleration, mass);
-        } else {
-            m_updatePosition(m_frameInfo, position, rotation, velocity, acceleration, mass);
-        }
+        m_updatePosition(m_frameInfo, position, velocity, acceleration, mass);
     }
 
     // transform (apply position rotation scale)
@@ -465,9 +486,17 @@ auto ::xrn::engine::AScene::update()
     }
 
     {
-        auto& position{ m_registry.get<Position>(m_camera.getId()) };
-        auto& rotation{ m_registry.get<Rotation>(m_camera.getId()) };
-        m_camera.setViewDirection(*position, rotation.getDirection());
+        auto& position{ m_registry.get<const Position>(m_camera.getId()) };
+        XRN_SASSERT(
+            m_registry.try_get<Position>(m_camera.getId())
+            , "Camera requires a position and direction component (missing Position)"
+        );
+        XRN_SASSERT(
+            m_registry.try_get<Direction>(m_camera.getId())
+            , "Camera requires a position and direction component (missing Direction)"
+        );
+        auto& direction{ m_registry.get<const Direction>(m_camera.getId()) };
+        m_camera.setViewDirection(position, direction);
     }
     return true;
 }

@@ -90,7 +90,7 @@ template <
     const float value
 ) -> Vector3::ParentType&
 {
-    return this->setX(value);
+    return this->set(::glm::vec3{ value, this->getY(), this->getZ()});
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -101,7 +101,7 @@ template <
     const float value
 ) -> Vector3::ParentType&
 {
-    return this->setY(value);
+    return this->set(::glm::vec3{ this->getX(), value, this->getZ() });
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -112,7 +112,7 @@ template <
     const float value
 ) -> Vector3::ParentType&
 {
-    return this->setZ(value);
+    return this->set(::glm::vec3{ this->getX(), this->getY(), value });
 }
 
 ///////////////////////////////////////////////////////////////////////////

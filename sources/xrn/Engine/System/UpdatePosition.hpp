@@ -53,37 +53,7 @@ public:
     void operator()(
         ::xrn::engine::vulkan::FrameInfo& frameInfo
         , ::xrn::engine::component::Position& position
-        , ::xrn::engine::component::Control& control
-        , ::xrn::OptRef<::xrn::engine::component::Rotation> rotation
-        , ::xrn::OptRef<::xrn::engine::component::Velocity> velocity
-        , ::xrn::OptRef<::xrn::engine::component::Acceleration> acceleration
-        , ::xrn::OptRef<const ::xrn::engine::component::Mass> mass
-    ) const;
-
-    ///////////////////////////////////////////////////////////////////////////
-    ///
-    ///////////////////////////////////////////////////////////////////////////
-    void operator()(
-        ::xrn::engine::vulkan::FrameInfo& frameInfo
-        , ::xrn::engine::component::Position& position
-        , ::xrn::OptRef<::xrn::engine::component::Rotation> rotation
-        , ::xrn::OptRef<::xrn::engine::component::Velocity> velocity
-        , ::xrn::OptRef<::xrn::engine::component::Acceleration> acceleration
-        , ::xrn::OptRef<const ::xrn::engine::component::Mass> mass
-    ) const;
-
-
-
-private:
-
-    ///////////////////////////////////////////////////////////////////////////
-    ///
-    ///////////////////////////////////////////////////////////////////////////
-    void updatePosition(
-        ::xrn::engine::vulkan::FrameInfo& frameInfo
-        , ::xrn::engine::component::Position& position
-        , const ::glm::vec3& direction
-        , ::xrn::OptRef<::xrn::engine::component::Velocity> velocity
+        , ::xrn::engine::component::Velocity& velocity
         , ::xrn::OptRef<::xrn::engine::component::Acceleration> acceleration
         , ::xrn::OptRef<const ::xrn::engine::component::Mass> mass
     ) const;

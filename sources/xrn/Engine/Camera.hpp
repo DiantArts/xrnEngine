@@ -1,5 +1,9 @@
 #pragma once
 
+namespace xrn::engine::component { class Position; }
+namespace xrn::engine::component { class Rotation; }
+namespace xrn::engine::component { class Direction; }
+
 namespace xrn::engine {
 
 ///////////////////////////////////////////////////////////////////////////
@@ -118,26 +122,26 @@ public:
     ///
     ///////////////////////////////////////////////////////////////////////////
     void setViewDirection(
-        ::glm::vec3 position
-        , ::glm::vec3 direction
-        , ::glm::vec3 up = ::glm::vec3{ 0.0f, 1.0f, 0.0f }
+        const ::xrn::engine::component::Position& position
+        , const ::xrn::engine::component::Direction& direction
+        , const ::glm::vec3& up = ::glm::vec3{ 0.0f, 1.0f, 0.0f }
     );
 
     ///////////////////////////////////////////////////////////////////////////
     ///
     ///////////////////////////////////////////////////////////////////////////
     void setViewTarget(
-        ::glm::vec3 position
-        , ::glm::vec3 target
-        , ::glm::vec3 up = ::glm::vec3{ 0.0f, 1.0f, 0.0f }
+        const ::xrn::engine::component::Position& position
+        , const ::xrn::engine::component::Position& target
+        , const ::glm::vec3& up = ::glm::vec3{ 0.0f, 1.0f, 0.0f }
     );
 
     ///////////////////////////////////////////////////////////////////////////
     ///
     ///////////////////////////////////////////////////////////////////////////
     void setViewYXZ(
-        ::glm::vec3 position
-        , ::glm::vec3 rotation
+        const ::xrn::engine::component::Position& position
+        , const ::xrn::engine::component::Rotation& rotation
     );
 
     ///////////////////////////////////////////////////////////////////////////

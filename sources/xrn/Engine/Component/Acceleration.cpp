@@ -1,6 +1,7 @@
 #include <pch.hpp>
 #include <xrn/Engine/Component/Acceleration.hpp>
 #include <xrn/Engine/Component/Control.hpp>
+#include <xrn/Engine/Component/Vector3.hpp>
 
 
 

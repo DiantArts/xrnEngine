@@ -7,7 +7,6 @@
 // Headers
 ///////////////////////////////////////////////////////////////////////////
 #include <xrn/Engine/MousePointer.hpp>
-#include "xrn/Engine/Component/Position.hpp"
 
 
 

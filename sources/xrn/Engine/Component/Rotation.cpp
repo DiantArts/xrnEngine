@@ -1,6 +1,7 @@
 #include <pch.hpp>
 #include <xrn/Engine/Component/Rotation.hpp>
 #include <xrn/Engine/Component/Control.hpp>
+#include <xrn/Engine/Component/Direction.hpp>
 #include <xrn/Engine/Configuration.hpp>
 
 
@@ -46,54 +47,28 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
-// Direction
+// Basic
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Rotation::updateDirection(
+void ::xrn::engine::component::Rotation::update(
     ::xrn::engine::component::Control& control
 )
 {
-    if (control.isRotated() || this->isChanged()) {
-        auto newRotation{ this->get() + control.getRotation() };
-
-        if (newRotation.y > ::xrn::engine::configuration.maxPitch) {
-            newRotation.y = ::xrn::engine::configuration.maxPitch;
-        } else if (newRotation.y < ::xrn::engine::configuration.minPitch) {
-            newRotation.y = ::xrn::engine::configuration.minPitch;
-        }
-
-        this->set(::std::move(newRotation));
-        m_direction = ::glm::normalize(::glm::vec3(
-            ::glm::cos(::glm::radians(this->getX())) * ::glm::cos(::glm::radians(this->getY()))
-            , ::glm::sin(::glm::radians(this->getY()))
-            , ::glm::sin(::glm::radians(this->getX())) * ::glm::cos(::glm::radians(this->getY()))
-        ));
-        control.resetRotatedFlag();
-        this->setChangedFlag(false);
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////
-void ::xrn::engine::component::Rotation::updateDirection()
-{
-    if (this->isChanged()) {
-        m_direction = ::glm::normalize(::glm::vec3(
-            ::glm::cos(::glm::radians(this->getX())) * ::glm::cos(::glm::radians(this->getY()))
-            , ::glm::sin(::glm::radians(this->getY()))
-            , ::glm::sin(::glm::radians(this->getX())) * ::glm::cos(::glm::radians(this->getY()))
-        ));
-        this->setChangedFlag(false);
-    }
+    this->set(this->get() + control.getRotation());
 }
 
 ///////////////////////////////////////////////////////////////////////////
 auto ::xrn::engine::component::Rotation::getDirection() const
-    -> const ::glm::vec3&
+    -> ::xrn::engine::component::Direction
 {
-    return m_direction;
+    return ::xrn::engine::component::Direction{ ::glm::normalize(::glm::vec3(
+        ::glm::cos(::glm::radians(this->getX())) * ::glm::cos(::glm::radians(this->getY()))
+        , ::glm::sin(::glm::radians(this->getY()))
+        , ::glm::sin(::glm::radians(this->getX())) * ::glm::cos(::glm::radians(this->getY()))
+    )) };
 }
 
 

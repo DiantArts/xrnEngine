@@ -1,11 +1,11 @@
 #pragma once
 
 #include <xrn/Engine/Component/Detail/Vector3.hpp>
-#include <xrn/Engine/Component/Mass.hpp>
-#include <xrn/Engine/Component/Acceleration.hpp>
 
 namespace xrn::engine::component { class Control; }
 namespace xrn::engine::component { class Acceleration; }
+namespace xrn::engine::component { class Mass; }
+namespace xrn::engine::component { class Direction; }
 
 namespace xrn::engine::component {
 
@@ -92,7 +92,21 @@ public:
     ///
     ///////////////////////////////////////////////////////////////////////////
     auto updateDirection(
-        const ::glm::vec3& direction
+        const ::xrn::engine::component::Direction& direction
+    ) -> Velocity&;
+
+    ///////////////////////////////////////////////////////////////////////////
+    ///
+    ///////////////////////////////////////////////////////////////////////////
+    auto applyAcceleration(
+        const ::xrn::engine::component::Acceleration& acceleration
+    ) -> Velocity&;
+
+    ///////////////////////////////////////////////////////////////////////////
+    ///
+    ///////////////////////////////////////////////////////////////////////////
+    auto removeAcceleration(
+        const ::xrn::engine::component::Acceleration& acceleration
     ) -> Velocity&;
 
     ///////////////////////////////////////////////////////////////////////////

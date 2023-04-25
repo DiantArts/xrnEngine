@@ -7,6 +7,9 @@
 // Headers
 ///////////////////////////////////////////////////////////////////////////
 #include <xrn/Engine/Camera.hpp>
+#include <xrn/Engine/Component/Position.hpp>
+#include <xrn/Engine/Component/Rotation.hpp>
+#include <xrn/Engine/Component/Direction.hpp>
 
 
 
@@ -102,12 +105,12 @@ auto ::xrn::engine::Camera::getProjection() const
 
 ///////////////////////////////////////////////////////////////////////////
 void ::xrn::engine::Camera::setViewDirection(
-    const ::glm::vec3 position
-    , const ::glm::vec3 direction
-    , const ::glm::vec3 up /* = ::glm::vec3{ 0.0f, -1.0f, 0.0f } */
+    const ::xrn::engine::component::Position& position
+    , const ::xrn::engine::component::Direction& direction
+    , const ::glm::vec3& up // = ::glm::vec3{ 0.0f, 1.0f, 0.0f }
 )
 {
-    const ::glm::vec3 w{ ::glm::normalize(direction)} ;
+    const ::glm::vec3 w{ ::glm::normalize(*direction)} ;
     const ::glm::vec3 u{ ::glm::normalize(glm::cross(w, up)) };
     const ::glm::vec3 v{ ::glm::cross(w, u) };
 
@@ -121,35 +124,33 @@ void ::xrn::engine::Camera::setViewDirection(
     m_viewMatrix[0][2] = w.x;
     m_viewMatrix[1][2] = w.y;
     m_viewMatrix[2][2] = w.z;
-    m_viewMatrix[3][0] = -::glm::dot(u, position);
-    m_viewMatrix[3][1] = -::glm::dot(v, position);
-    m_viewMatrix[3][2] = -::glm::dot(w, position);
+    m_viewMatrix[3][0] = -::glm::dot(u, *position);
+    m_viewMatrix[3][1] = -::glm::dot(v, *position);
+    m_viewMatrix[3][2] = -::glm::dot(w, *position);
 }
 
 ///////////////////////////////////////////////////////////////////////////
 void ::xrn::engine::Camera::setViewTarget(
-    const ::glm::vec3 position
-    , const ::glm::vec3 target
-    , const ::glm::vec3 up /* = ::glm::vec3{ 0.0f, -1.0f, 0.0f } */
+    const ::xrn::engine::component::Position& position
+    , const ::xrn::engine::component::Position& target
+    , const ::glm::vec3& up // = ::glm::vec3{ 0.0f, 1.0f, 0.0f }
 )
 {
-    const auto direction{ target - position };
-    XRN_SASSERT((direction.x != 0 || direction.y != 0 || direction.z != 0), "direction provided is 0");
-    setViewDirection(position, direction, up);
+    setViewDirection(position, ::xrn::engine::component::Direction{ *target - *position }, up);
 }
 
 ///////////////////////////////////////////////////////////////////////////
 void ::xrn::engine::Camera::setViewYXZ(
-    const ::glm::vec3 position
-    , const ::glm::vec3 rotation
+    const ::xrn::engine::component::Position& position
+    , const ::xrn::engine::component::Rotation& rotation
 )
 {
-    const float c3{ ::glm::cos(rotation.z) };
-    const float s3{ ::glm::sin(rotation.z) };
-    const float c2{ ::glm::cos(rotation.x) };
-    const float s2{ ::glm::sin(rotation.x) };
-    const float c1{ ::glm::cos(rotation.y) };
-    const float s1{ ::glm::sin(rotation.y) };
+    const float c3{ ::glm::cos(rotation.getZ()) };
+    const float s3{ ::glm::sin(rotation.getZ()) };
+    const float c2{ ::glm::cos(rotation.getX()) };
+    const float s2{ ::glm::sin(rotation.getX()) };
+    const float c1{ ::glm::cos(rotation.getY()) };
+    const float s1{ ::glm::sin(rotation.getY()) };
     const ::glm::vec3 u{ (c1 * c3 + s1 * s2 * s3), (c2 * s3), (c1 * s2 * s3 - c3 * s1) };
     const ::glm::vec3 v{ (c3 * s1 * s2 - c1 * s3), (c2 * c3), (c1 * c3 * s2 + s1 * s3) };
     const ::glm::vec3 w{ (c2 * s1), (-s2), (c1 * c2) };
@@ -163,9 +164,9 @@ void ::xrn::engine::Camera::setViewYXZ(
     m_viewMatrix[0][2] = w.x;
     m_viewMatrix[1][2] = w.y;
     m_viewMatrix[2][2] = w.z;
-    m_viewMatrix[3][0] = -::glm::dot(u, position);
-    m_viewMatrix[3][1] = -::glm::dot(v, position);
-    m_viewMatrix[3][2] = -::glm::dot(w, position);
+    m_viewMatrix[3][0] = -::glm::dot(u, *position);
+    m_viewMatrix[3][1] = -::glm::dot(v, *position);
+    m_viewMatrix[3][2] = -::glm::dot(w, *position);
 }
 
 ///////////////////////////////////////////////////////////////////////////

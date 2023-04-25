@@ -1,6 +1,8 @@
 #include <pch.hpp>
 #include <xrn/Engine/Component/Control.hpp>
 #include <xrn/Engine/Component/Transform3d.hpp>
+#include <xrn/Engine/Component/Direction.hpp>
+#include <xrn/Engine/Component/Velocity.hpp>
 #include <xrn/Engine/Configuration.hpp>
 
 
@@ -42,130 +44,208 @@ auto ::xrn::engine::component::Control::setSpeed(
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
-// Start moving
+// Start/stop moving
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Control::startMovingForward()
-    -> Control&
+auto ::xrn::engine::component::Control::startMovingForward(
+    const ::xrn::engine::component::Direction& direction
+    , ::xrn::engine::component::Velocity& velocity
+) -> Control&
 {
     m_movementState[Control::MovementState::forward] = true;
-    return *this;
+    return this->updateAcceleration(direction, velocity);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Control::startMovingBackward()
-    -> Control&
+auto ::xrn::engine::component::Control::startMovingBackward(
+    const ::xrn::engine::component::Direction& direction
+    , ::xrn::engine::component::Velocity& velocity
+) -> Control&
 {
     m_movementState[Control::MovementState::backward] = true;
-    return *this;
+    return this->updateAcceleration(direction, velocity);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Control::startMovingRight()
-    -> Control&
+auto ::xrn::engine::component::Control::startMovingRight(
+    const ::xrn::engine::component::Direction& direction
+    , ::xrn::engine::component::Velocity& velocity
+) -> Control&
 {
     m_movementState[Control::MovementState::right] = true;
-    return *this;
+    return this->updateAcceleration(direction, velocity);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Control::startMovingLeft()
-    -> Control&
+auto ::xrn::engine::component::Control::startMovingLeft(
+    const ::xrn::engine::component::Direction& direction
+    , ::xrn::engine::component::Velocity& velocity
+) -> Control&
 {
     m_movementState[Control::MovementState::left] = true;
-    return *this;
+    return this->updateAcceleration(direction, velocity);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Control::startMovingUp()
-    -> Control&
+auto ::xrn::engine::component::Control::startMovingUp(
+    const ::xrn::engine::component::Direction& direction
+    , ::xrn::engine::component::Velocity& velocity
+) -> Control&
 {
     m_movementState[Control::MovementState::up] = true;
-    return *this;
+    return this->updateAcceleration(direction, velocity);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Control::startMovingDown()
-    -> Control&
+auto ::xrn::engine::component::Control::startMovingDown(
+    const ::xrn::engine::component::Direction& direction
+    , ::xrn::engine::component::Velocity& velocity
+) -> Control&
 {
     m_movementState[Control::MovementState::down] = true;
-    return *this;
+    return this->updateAcceleration(direction, velocity);
 }
 
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-// Stop moving
-//
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-
 ///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Control::stopMovingForward()
-    -> Control&
+auto ::xrn::engine::component::Control::stopMovingForward(
+    const ::xrn::engine::component::Direction& direction
+    , ::xrn::engine::component::Velocity& velocity
+) -> Control&
 {
     m_movementState[Control::MovementState::forward] = false;
-    return *this;
+    return this->updateAcceleration(direction, velocity);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Control::stopMovingBackward()
-    -> Control&
+auto ::xrn::engine::component::Control::stopMovingBackward(
+    const ::xrn::engine::component::Direction& direction
+    , ::xrn::engine::component::Velocity& velocity
+) -> Control&
 {
     m_movementState[Control::MovementState::backward] = false;
-    return *this;
+    return this->updateAcceleration(direction, velocity);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Control::stopMovingRight()
-    -> Control&
+auto ::xrn::engine::component::Control::stopMovingRight(
+    const ::xrn::engine::component::Direction& direction
+    , ::xrn::engine::component::Velocity& velocity
+) -> Control&
 {
     m_movementState[Control::MovementState::right] = false;
-    return *this;
+    return this->updateAcceleration(direction, velocity);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Control::stopMovingLeft()
-    -> Control&
+auto ::xrn::engine::component::Control::stopMovingLeft(
+    const ::xrn::engine::component::Direction& direction
+    , ::xrn::engine::component::Velocity& velocity
+) -> Control&
 {
     m_movementState[Control::MovementState::left] = false;
-    return *this;
+    return this->updateAcceleration(direction, velocity);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Control::stopMovingUp()
-    -> Control&
+auto ::xrn::engine::component::Control::stopMovingUp(
+    const ::xrn::engine::component::Direction& direction
+    , ::xrn::engine::component::Velocity& velocity
+) -> Control&
 {
     m_movementState[Control::MovementState::up] = false;
-    return *this;
+    return this->updateAcceleration(direction, velocity);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Control::stopMovingDown()
-    -> Control&
+auto ::xrn::engine::component::Control::stopMovingDown(
+    const ::xrn::engine::component::Direction& direction
+    , ::xrn::engine::component::Velocity& velocity
+) -> Control&
 {
     m_movementState[Control::MovementState::down] = false;
+    return this->updateAcceleration(direction, velocity);
+}
+
+///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::component::Control::stopMoving(
+    const ::xrn::engine::component::Direction& direction [[ maybe_unused ]]
+    , ::xrn::engine::component::Velocity& velocity
+) -> Control&
+{
+    m_movementState.reset();
+    velocity.removeAcceleration(m_acceleration);
+    m_acceleration.set(::glm::vec3{ 0 });
     return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Control::stopMoving()
-    -> Control&
+auto ::xrn::engine::component::Control::immobilize(
+    const ::xrn::engine::component::Direction& direction [[ maybe_unused ]]
+    , ::xrn::engine::component::Velocity& velocity
+) -> Control&
 {
     m_movementState.reset();
+    velocity.removeAcceleration(m_acceleration);
+    m_acceleration.set(::glm::vec3{ 0 });
     return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
-auto ::xrn::engine::component::Control::immobilize()
-    -> Control&
+auto ::xrn::engine::component::Control::updateAcceleration(
+    const ::xrn::engine::component::Direction& direction [[ maybe_unused ]]
+    , ::xrn::engine::component::Velocity& velocity
+) -> Control&
 {
-    m_movementState.reset();
+    velocity.removeAcceleration(m_acceleration);
+    m_acceleration.set(::glm::vec3{ 0 });
+
+    // bot top
+    if (this->isAbleToFly()) {
+        if (this->isMovingUp()) {
+            if (!this->isMovingDown()) {
+                m_acceleration += ::glm::vec3(0.0f, 1.0f, 0.0f);
+            }
+        } else if (this->isMovingDown()) {
+            m_acceleration -= ::glm::vec3(0.0f, 1.0f, 0.0f);
+        }
+    }
+
+    // left right
+    if (this->isMovingLeft()) {
+        if (!this->isMovingRight()) {
+            m_acceleration -= ::glm::normalize(glm::cross(*direction, ::glm::vec3(0.0f, 1.0f, 0.0f)));;
+        }
+    } else if (this->isMovingRight()) {
+        m_acceleration += ::glm::normalize(glm::cross(*direction, ::glm::vec3(0.0f, 1.0f, 0.0f)));;
+    }
+
+    // forward backward
+    if (this->isMovingForward()) {
+        if (!this->isMovingBackward()) {
+            m_acceleration += *direction;
+        }
+    } else if (this->isMovingBackward()) {
+        m_acceleration -= *direction;
+    }
+
+    if (m_acceleration.getX() == 0.f && m_acceleration.getY() == 0.f && m_acceleration.getZ() == 0.f) {
+        return *this; // not any direction
+    }
+
+    m_acceleration.setMagnitude(this->getSpeed());
+    velocity.applyAcceleration(m_acceleration);
+
     return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////
+[[ nodiscard ]] auto ::xrn::engine::component::Control::getAcceleration() const
+    -> const ::xrn::engine::component::Acceleration&
+{
+    return m_acceleration;
 }
 
 
@@ -233,8 +313,7 @@ auto ::xrn::engine::component::Control::rotate(
     const ::glm::vec3& offset
 ) -> Control&
 {
-    this->rotate(offset.x, offset.y, offset.z);
-    return *this;
+    return this->rotate(offset.x, offset.y, offset.z);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -244,10 +323,7 @@ auto ::xrn::engine::component::Control::rotate(
     , const float rotationOffsetZ
 ) -> Control&
 {
-    this->rotateX(rotationOffsetX);
-    this->rotateY(rotationOffsetY);
-    this->rotateZ(rotationOffsetZ);
-    return *this;
+    return this->rotate(rotationOffsetX, rotationOffsetY, rotationOffsetZ);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -255,7 +331,7 @@ auto ::xrn::engine::component::Control::rotateX(
     const float offset
 ) -> Control&
 {
-    m_rotation.x += offset * ::xrn::engine::configuration.sensitivity.x;
+    m_rotation.addX(offset * ::xrn::engine::configuration.sensitivity.x);
     return *this;
 }
 
@@ -264,7 +340,7 @@ auto ::xrn::engine::component::Control::rotateY(
     const float offset
 ) -> Control&
 {
-    m_rotation.y += offset * ::xrn::engine::configuration.sensitivity.y;
+    m_rotation.addY(offset * ::xrn::engine::configuration.sensitivity.y);
     return *this;
 }
 
@@ -273,7 +349,7 @@ auto ::xrn::engine::component::Control::rotateZ(
     const float offset
 ) -> Control&
 {
-    m_rotation.y += offset * ::xrn::engine::configuration.sensitivity.z;
+    m_rotation.addY(offset * ::xrn::engine::configuration.sensitivity.z);
     return *this;
 }
 
@@ -282,7 +358,7 @@ auto ::xrn::engine::component::Control::rotateAbsolute(
     ::glm::vec3 rotation
 ) -> Control&
 {
-    m_rotation = ::std::move(rotation);
+    m_rotation.set(::std::move(rotation));
     return *this;
 }
 
@@ -294,8 +370,8 @@ auto ::xrn::engine::component::Control::rotateAbsolute(
     , const float rotationZ
 ) -> Control&
 {
+    m_rotation.set(::glm::vec3{ rotationX, rotationY, rotationZ });
     return *this;
-    m_rotation = ::glm::vec3{ rotationX, rotationY, rotationZ };
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -303,7 +379,7 @@ auto ::xrn::engine::component::Control::rotateAbsoluteX(
     const float rotationX
 ) -> Control&
 {
-    m_rotation.x = rotationX;
+    m_rotation.setX(rotationX);
     return *this;
 }
 
@@ -312,7 +388,7 @@ auto ::xrn::engine::component::Control::rotateAbsoluteY(
     const float rotationY
 ) -> Control&
 {
-    m_rotation.y = rotationY;
+    m_rotation.setY(rotationY);
     return *this;
 }
 
@@ -321,7 +397,7 @@ auto ::xrn::engine::component::Control::rotateAbsoluteZ(
     const float rotationZ
 ) -> Control&
 {
-    m_rotation.y = rotationZ;
+    m_rotation.setY(rotationZ);
     return *this;
 }
 
@@ -329,22 +405,20 @@ auto ::xrn::engine::component::Control::rotateAbsoluteZ(
 auto ::xrn::engine::component::Control::isRotated() const
     -> bool
 {
-    return m_rotation.x == 0.f || m_rotation.y == 0.f || m_rotation.z == 0.f;
+    return m_rotation.getX() != 0.f || m_rotation.getY() != 0.f || m_rotation.getZ() != 0.f;
 }
 
 ///////////////////////////////////////////////////////////////////////////
 auto ::xrn::engine::component::Control::resetRotatedFlag()
     -> Control&
 {
-    m_rotation.x = 0.f;
-    m_rotation.y = 0.f;
-    m_rotation.z = 0.f;
+    m_rotation.set(0.f);
     return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////
 auto ::xrn::engine::component::Control::getRotation() const
-    -> const ::glm::vec3&
+    -> const ::xrn::engine::component::Rotation&
 {
     return m_rotation;
 }
