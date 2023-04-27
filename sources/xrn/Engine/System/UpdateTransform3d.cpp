@@ -24,6 +24,7 @@ void ::xrn::engine::system::UpdateTransform3d::operator()(
     , ::xrn::OptRef<::xrn::engine::component::Position> position
     , ::xrn::OptRef<::xrn::engine::component::Rotation> rotation
     , ::xrn::OptRef<::xrn::engine::component::Scale> scale
+    , ::xrn::OptRef<::xrn::engine::component::Direction> direction
 ) const
 {
     if (position) {
@@ -40,6 +41,24 @@ void ::xrn::engine::system::UpdateTransform3d::operator()(
                 transform.updateNormalMatrix(rotation);
                 rotation->resetChangedFlag();
             }
+        // } else if (direction) {
+            // ::glm::mat4 rotationMatrix = ::glm::lookAt(glm::vec3(0.0f), **direction, glm::vec3(0.0f, 1.0f, 0.0f));
+            // ::xrn::engine::component::Rotation rotation2{
+                // ::glm::degrees(glm::eulerAngles(glm::quat(rotationMatrix)))
+            // };
+            // rotation2.addY(90);
+            // if (scale) {
+                // if (position->isChanged() || direction->isChanged() || scale->isChanged()) {
+                    // transform.updateMatrix(position, rotation2, scale);
+                    // transform.updateNormalMatrix(rotation2, scale);
+                // }
+                // scale->resetChangedFlag();
+                // direction->resetChangedFlag();
+            // } else if (position->isChanged() || direction->isChanged()) {
+                // transform.updateMatrix(position, rotation2);
+                // transform.updateNormalMatrix(rotation2);
+                // direction->resetChangedFlag();
+            // }
         } else {
             if (scale) {
                 if (position->isChanged() || scale->isChanged()) {

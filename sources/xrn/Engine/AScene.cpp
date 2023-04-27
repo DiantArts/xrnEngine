@@ -307,7 +307,6 @@ void ::xrn::engine::AScene::onSystemMouseMoved(
             XRN_SASSERT(velocity, "controlled actor needs a velocity component");
             control->rotateX(-offset.x);
             control->rotateY(offset.y);
-            ::fmt::print("{}\n", *control->getRotation());
             return;
         }
     }
@@ -447,23 +446,28 @@ auto ::xrn::engine::AScene::update()
     this->updateCamera();
 
     // update direction
-    for (auto [entity, rotation, direction] : m_registry.view<Rotation, Direction>().each()) {
+    for (auto [entity, direction] : m_registry.view<Direction>().each()) {
         auto* control{ m_registry.try_get<Control>(entity) };
-        if (control && control->isRotated()) {
-            ::fmt::print("{}\n", *control->getRotation());
-            rotation.update(*control);
-            direction = rotation.getDirection();
-        } else if (rotation.isChanged()) {
-            direction = rotation.getDirection();
+        auto* rotation{ m_registry.try_get<Rotation>(entity) };
+        if (control) {
+            if (control->isRotated() && rotation) {
+                rotation->update(*control);
+                direction = rotation->getDirection();
+            }
+        } else {
+            auto* velocity{ m_registry.try_get<Velocity>(entity) };
+            if (velocity && velocity->isChanged()) {
+                direction = ::glm::normalize(**velocity);
+            } else if (rotation && rotation->isChanged()) {
+                direction = rotation->getDirection();
+            }
         }
     }
 
-    // control
+    // position
     for (auto [entity, position, velocity] : m_registry.view<Position, Velocity>().each()) {
         auto* acceleration{ m_registry.try_get<Acceleration>(entity) };
         auto* mass{ m_registry.try_get<Mass>(entity) };
-        auto* control{ m_registry.try_get<Control>(entity) };
-
         m_updatePosition(m_frameInfo, position, velocity, acceleration, mass);
     }
 
@@ -472,7 +476,8 @@ auto ::xrn::engine::AScene::update()
         auto* position{ m_registry.try_get<Position>(entity) };
         auto* rotation{ m_registry.try_get<Rotation>(entity) };
         auto* scale{ m_registry.try_get<Scale>(entity) };
-        m_updateTransform3d(m_frameInfo, transform, position, rotation, scale);
+        auto* direction{ m_registry.try_get<Direction>(entity) };
+        m_updateTransform3d(m_frameInfo, transform, position, rotation, scale, direction);
     }
 
     {
@@ -486,7 +491,6 @@ auto ::xrn::engine::AScene::update()
     }
 
     {
-        auto& position{ m_registry.get<const Position>(m_camera.getId()) };
         XRN_SASSERT(
             m_registry.try_get<Position>(m_camera.getId())
             , "Camera requires a position and direction component (missing Position)"
@@ -495,6 +499,7 @@ auto ::xrn::engine::AScene::update()
             m_registry.try_get<Direction>(m_camera.getId())
             , "Camera requires a position and direction component (missing Direction)"
         );
+        auto& position{ m_registry.get<const Position>(m_camera.getId()) };
         auto& direction{ m_registry.get<const Direction>(m_camera.getId()) };
         m_camera.setViewDirection(position, direction);
     }
@@ -550,7 +555,7 @@ void ::xrn::engine::AScene::updateCamera()
 {
     const float aspect{ m_renderer.getAspectRatio() };
     // m_camera.setOrthographicProjection(-aspect, aspect, -1.0, 1.0, -1.0, 1.0);
-    m_camera.setPerspectiveProjection(::glm::radians(50.0f), aspect, 0.1f, 1000.0f);
+    m_camera.setPerspectiveProjection(::glm::radians(50.0f), aspect, 0.1f, 2000.0f);
     // m_camera.setViewTarget(
         // { 0.0f, 0.0f, 0.0f }
         // , this->getPlayerComponent<::xrn::engine::component::Transform3d>().getPosition()

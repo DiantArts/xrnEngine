@@ -166,6 +166,16 @@ void ::xrn::engine::vulkan::Model::Builder::loadFromFile(
 }
 
 ///////////////////////////////////////////////////////////////////////////
+auto ::xrn::engine::vulkan::Model::createModelBuilder(
+    ::std::string_view filename
+) -> Model::Builder
+{
+    Model::Builder modelBuilder;
+    modelBuilder.loadFromFile(filename);
+    return modelBuilder;
+}
+
+///////////////////////////////////////////////////////////////////////////
 auto ::xrn::engine::vulkan::Model::createFromFile(
     ::xrn::engine::vulkan::Device& device
     , ::std::string_view filename

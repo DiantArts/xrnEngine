@@ -1,6 +1,7 @@
 #pragma once
 
 #include <xrn/Engine/Component/Acceleration.hpp>
+#include <xrn/Engine/Component/Rotation.hpp>
 
 namespace xrn::engine::component { class Transform3d; }
 namespace xrn::engine::component { class Velocity; }

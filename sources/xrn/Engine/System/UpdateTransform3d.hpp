@@ -5,6 +5,7 @@
 #include <xrn/Engine/Component/Position.hpp>
 #include <xrn/Engine/Component/Rotation.hpp>
 #include <xrn/Engine/Component/Scale.hpp>
+#include <xrn/Engine/Component/Direction.hpp>
 
 namespace xrn::engine::system {
 
@@ -35,6 +36,7 @@ public:
         , ::xrn::OptRef<::xrn::engine::component::Position> position
         , ::xrn::OptRef<::xrn::engine::component::Rotation> rotation
         , ::xrn::OptRef<::xrn::engine::component::Scale> scale
+        , ::xrn::OptRef<::xrn::engine::component::Direction> direction
     ) const;
 
 };

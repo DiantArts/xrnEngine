@@ -8,6 +8,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
+#include <glm/geometric.hpp>
 template <
     typename T
     , bool hasChangedFlag
@@ -185,33 +186,6 @@ template <
 ) -> Vector3::ParentType&
 {
     return this->setYZ(value.x, value.y);
-}
-
-///////////////////////////////////////////////////////////////////////////
-template <
-    typename T
-    , bool hasChangedFlag
-> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::setMagnitude(
-    const float value
-) -> Vector3::ParentType&
-{
-
-    return this->set(this->get() * (value / ::glm::length(this->get())));
-}
-
-///////////////////////////////////////////////////////////////////////////
-template <
-    typename T
-    , bool hasChangedFlag
-> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::setLength(
-    const float value
-) -> Vector3::ParentType&
-{
-    if (::glm::length(this->get()) > value) {
-        return this->set(::glm::normalize(this->get()) * value);
-    } else {
-        return static_cast<Vector3::ParentType&>(*this);
-    }
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -398,6 +372,74 @@ template <
     -> ::glm::vec2
 {
     return ::glm::vec2{ this->get().y, this->get().z };
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+// Vectors operations
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::setMagnitude(
+    const float value
+) -> Vector3::ParentType&
+{
+
+    return this->set(this->get() * (value / ::glm::length(this->get())));
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::setLength(
+    const float value
+) -> Vector3::ParentType&
+{
+    if (::glm::length(this->get()) > value) {
+        return this->set(::glm::normalize(this->get()) * value);
+    } else {
+        return static_cast<Vector3::ParentType&>(*this);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::dot(
+    const ::glm::vec3& value
+) -> Vector3::ParentType&
+{
+    return this->set(::glm::dot(this->get(), value));
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::normalize()
+    -> Vector3::ParentType&
+{
+    return this->set(::glm::normalize(this->get()));
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::reflect(
+    const ::glm::vec3& normal
+) -> Vector3::ParentType&
+{
+    return this->set(this->get() - 2 * ::glm::dot(this->get(), normal) * normal);
 }
 
 
