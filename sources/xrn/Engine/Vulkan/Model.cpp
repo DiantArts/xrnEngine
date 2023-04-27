@@ -100,7 +100,7 @@ auto ::xrn::engine::vulkan::Model::Vertex::operator==(
 
 ///////////////////////////////////////////////////////////////////////////
 void ::xrn::engine::vulkan::Model::Builder::loadFromFile(
-    ::std::string_view filename
+    const ::std::string& filename
 )
 {
     ::tinyobj::attrib_t attrib;
@@ -167,7 +167,7 @@ void ::xrn::engine::vulkan::Model::Builder::loadFromFile(
 
 ///////////////////////////////////////////////////////////////////////////
 auto ::xrn::engine::vulkan::Model::createModelBuilder(
-    ::std::string_view filename
+    const ::std::string& filename
 ) -> Model::Builder
 {
     Model::Builder modelBuilder;
@@ -178,23 +178,33 @@ auto ::xrn::engine::vulkan::Model::createModelBuilder(
 ///////////////////////////////////////////////////////////////////////////
 auto ::xrn::engine::vulkan::Model::createFromFile(
     ::xrn::engine::vulkan::Device& device
-    , ::std::string_view filename
-) -> ::std::unique_ptr<::xrn::engine::vulkan::Model>
+    , const ::std::string& filename
+) -> ::std::shared_ptr<::xrn::engine::vulkan::Model>
 {
+    if (auto it{ m_modelCache.find(filename) }; it != m_modelCache.end()) {
+        return it->second;
+    }
+
     Model::Builder modelBuilder;
     modelBuilder.loadFromFile(filename);
-    return ::std::make_unique<::xrn::engine::vulkan::Model>(device, modelBuilder);
+    auto model{ ::std::make_shared<::xrn::engine::vulkan::Model>(device, modelBuilder) };
+    m_modelCache.emplace(filename, model);
+    return model;
 }
 
 ///////////////////////////////////////////////////////////////////////////
 auto ::xrn::engine::vulkan::Model::createFromFile(
     ::xrn::engine::vulkan::Device* device
-    , ::std::string_view filename
-) -> ::std::unique_ptr<::xrn::engine::vulkan::Model>
+    , const ::std::string& filename
+) -> ::std::shared_ptr<::xrn::engine::vulkan::Model>
 {
-    Model::Builder modelBuilder;
-    modelBuilder.loadFromFile(filename);
-    return ::std::make_unique<::xrn::engine::vulkan::Model>(device, modelBuilder);
+    return Model::createFromFile(*device, filename);
+}
+
+///////////////////////////////////////////////////////////////////////////
+void ::xrn::engine::vulkan::Model::clearCache()
+{
+    m_modelCache.clear();
 }
 
 

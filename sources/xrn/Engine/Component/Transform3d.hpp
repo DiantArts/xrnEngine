@@ -22,7 +22,7 @@ public:
     ///
     ///////////////////////////////////////////////////////////////////////////
     Transform3d(
-        ::std::unique_ptr<::xrn::engine::vulkan::Model>&& model
+        ::std::shared_ptr<::xrn::engine::vulkan::Model> model
     );
 
 
@@ -128,7 +128,7 @@ public:
 
 private:
 
-    ::std::unique_ptr<::xrn::engine::vulkan::Model> m_model;
+    ::std::shared_ptr<::xrn::engine::vulkan::Model> m_model;
     ::glm::mat4 m_matrix{ 1.0f };
     ::glm::mat3 m_normalMatrix{ 1.0f };
 

@@ -14,9 +14,9 @@
 ///
 ///////////////////////////////////////////////////////////////////////////
 ::xrn::engine::component::Transform3d::Transform3d(
-    ::std::unique_ptr<::xrn::engine::vulkan::Model>&& model
+    ::std::shared_ptr<::xrn::engine::vulkan::Model> model
 )
-    : m_model{ ::std::move(model) }
+    : m_model{ model }
 {}
 
 
