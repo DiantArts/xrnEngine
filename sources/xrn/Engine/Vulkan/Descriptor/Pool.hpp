@@ -10,7 +10,7 @@ class Pool {
  public:
   class Builder {
    public:
-    Builder(::xrn::engine::vulkan::Device &device) : device{device} {}
+    Builder(::xrn::engine::vulkan::Device &otherDevice) : device{otherDevice} {}
 
     Builder &addPoolSize(::VkDescriptorType descriptorType, ::std::uint32_t count);
     Builder &setPoolFlags(::VkDescriptorPoolCreateFlags flags);

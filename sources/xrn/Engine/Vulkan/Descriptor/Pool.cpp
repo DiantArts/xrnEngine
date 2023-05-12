@@ -26,11 +26,11 @@ auto ::xrn::engine::vulkan::descriptor::Pool::Builder::build() const -> std::uni
 // *************** Descriptor Pool *********************
 
 ::xrn::engine::vulkan::descriptor::Pool::Pool(
-    ::xrn::engine::vulkan::Device &device,
+    ::xrn::engine::vulkan::Device &otherDevice,
     uint32_t maxSets,
     ::VkDescriptorPoolCreateFlags poolFlags,
     const ::std::vector<::VkDescriptorPoolSize> &poolSizes)
-    : device{device} {
+    : device{otherDevice} {
   ::VkDescriptorPoolCreateInfo descriptorPoolInfo{};
   descriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
   descriptorPoolInfo.poolSizeCount = static_cast<::std::uint32_t>(poolSizes.size());

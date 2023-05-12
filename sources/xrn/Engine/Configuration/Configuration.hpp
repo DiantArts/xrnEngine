@@ -47,7 +47,7 @@ namespace xrn::engine { using Configuration = ::xrn::engine::detail::Configurati
 // Global
 ///////////////////////////////////////////////////////////////////////////
 namespace xrn::engine::detail::configuration {
-    extern ::xrn::engine::detail::configuration::Configuration configuration;
+    static inline constexpr ::xrn::engine::detail::configuration::Configuration configuration;
     static inline constexpr auto& config{ ::xrn::engine::detail::configuration::configuration };
 }
 namespace xrn::engine::detail {

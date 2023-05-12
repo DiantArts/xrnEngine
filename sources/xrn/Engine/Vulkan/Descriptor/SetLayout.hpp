@@ -10,7 +10,7 @@ class SetLayout {
  public:
   class Builder {
    public:
-    Builder(::xrn::engine::vulkan::Device &device) : device{device} {}
+    Builder(::xrn::engine::vulkan::Device &otherDevice) : device{otherDevice} {}
 
     Builder &addBinding(
         ::std::uint32_t binding,
@@ -25,7 +25,7 @@ class SetLayout {
   };
 
   SetLayout(
-      ::xrn::engine::vulkan::Device &device, ::std::unordered_map<::std::uint32_t, ::VkDescriptorSetLayoutBinding> bindings);
+      ::xrn::engine::vulkan::Device &otherDevice, ::std::unordered_map<::std::uint32_t, ::VkDescriptorSetLayoutBinding> bindings);
   ~SetLayout();
   SetLayout(const ::xrn::engine::vulkan::descriptor::SetLayout &) = delete;
   SetLayout &operator=(const ::xrn::engine::vulkan::descriptor::SetLayout &) = delete;

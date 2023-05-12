@@ -51,7 +51,7 @@ public:
     ///
     ///////////////////////////////////////////////////////////////////////////
     void operator()(
-        ::xrn::engine::vulkan::FrameInfo& frameInfo
+        ::xrn::Time deltaTime
         , ::xrn::engine::component::Position& position
         , ::xrn::engine::component::Velocity& velocity
         , ::xrn::OptRef<::xrn::engine::component::Acceleration> acceleration

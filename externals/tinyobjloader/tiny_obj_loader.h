@@ -74,13 +74,16 @@ namespace tinyobj {
 #endif
 
 #ifdef __clang__
-#pragma clang diagnostic push
-#if __has_warning("-Wzero-as-null-pointer-constant")
-#pragma clang diagnostic ignored "-Wzero-as-null-pointer-constant"
-#endif
+    #pragma clang diagnostic push
+    #if __has_warning("-Wzero-as-null-pointer-constant")
+        #pragma clang diagnostic ignored "-Wzero-as-null-pointer-constant"
+    #endif
 
-#pragma clang diagnostic ignored "-Wpadded"
+    #pragma clang diagnostic ignored "-Wpadded"
 
+#elif __GNUC__
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wuseless-cast"
 #endif
 
 // https://en.wikipedia.org/wiki/Wavefront_.obj_file says ...
@@ -668,8 +671,11 @@ bool ParseTextureNameAndOption(std::string *texname, texture_option_t *texopt,
 #else
 
 #ifdef __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Weverything"
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Weverything"
+#elif __GNUC__
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wuseless-cast"
 #endif
 
 #include <array>
@@ -677,6 +683,8 @@ bool ParseTextureNameAndOption(std::string *texname, texture_option_t *texopt,
 
 #ifdef __clang__
 #pragma clang diagnostic pop
+#elif __GNUC__
+#pragma GCC diagnostic pop
 #endif
 
 #endif
@@ -3326,7 +3334,9 @@ bool ObjReader::ParseFromString(const std::string &obj_text,
 }
 
 #ifdef __clang__
-#pragma clang diagnostic pop
+    #pragma clang diagnostic pop
+#elif __GNUC__
+    #pragma GCC diagnostic pop
 #endif
 }  // namespace tinyobj
 

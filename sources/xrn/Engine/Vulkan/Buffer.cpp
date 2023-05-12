@@ -8,8 +8,13 @@
 #include <pch.hpp>
 #include <xrn/Engine/Vulkan/Buffer.hpp>
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wold-style-cast"
+#ifdef __clang__
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wold-style-cast"
+#elif defined(__GNUC__) || defined(__GNUG__)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif // __clang__
 
 namespace xrn::engine::vulkan {
 
@@ -30,18 +35,18 @@ VkDeviceSize Buffer::getAlignment(VkDeviceSize instanceSize, VkDeviceSize minOff
 }
 
 Buffer::Buffer(
-    ::xrn::engine::vulkan::Device &device
-    , VkDeviceSize instanceSize
-    , uint32_t instanceCount
-    , VkBufferUsageFlags usageFlags
-    , VkMemoryPropertyFlags memoryPropertyFlags
-    , VkDeviceSize minOffsetAlignment)
-    : device{device}
-      , m_instanceCount{instanceCount}
-      , m_instanceSize{instanceSize}
-      , m_usageFlags{usageFlags}
-      , m_memoryPropertyFlags{memoryPropertyFlags} {
-  m_alignmentSize = getAlignment(m_instanceSize, minOffsetAlignment);
+    ::xrn::engine::vulkan::Device &otherDevice
+    , VkDeviceSize otherInstanceSize
+    , uint32_t otherInstanceCount
+    , VkBufferUsageFlags otherUsageFlags
+    , VkMemoryPropertyFlags otherMemoryPropertyFlags
+    , VkDeviceSize otherMinOffsetAlignment)
+    : device{otherDevice}
+      , m_instanceCount{otherInstanceCount}
+      , m_instanceSize{otherInstanceSize}
+      , m_usageFlags{otherUsageFlags}
+      , m_memoryPropertyFlags{otherMemoryPropertyFlags} {
+  m_alignmentSize = getAlignment(m_instanceSize, otherMinOffsetAlignment);
   m_bufferSize = m_alignmentSize * m_instanceCount;
   device.createBuffer(m_bufferSize, m_usageFlags, m_memoryPropertyFlags, buffer, memory);
 }
@@ -200,4 +205,8 @@ VkResult Buffer::invalidateIndex(int index) {
 
 }  // namespace xrn::engine::vulkan
 
-#pragma clang diagnostic pop
+#ifdef __clang__
+    #pragma clang diagnostic pop
+#elif defined(__GNUC__) || defined(__GNUG__)
+    #pragma GCC diagnostic pop
+#endif // __clang__

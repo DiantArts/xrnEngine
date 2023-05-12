@@ -157,7 +157,7 @@ void ::xrn::engine::vulkan::Model::Builder::loadFromFile(
             }
 
             if (!uniqueVertices.count(vertex)) {
-                uniqueVertices[vertex] = static_cast<::std::size_t>(vertices.size());
+                uniqueVertices[vertex] = vertices.size();
                 vertices.push_back(::std::move(vertex));
             }
             indices.push_back(static_cast<unsigned int>(uniqueVertices[vertex]));

@@ -7,7 +7,8 @@
     ::std::uint32_t binding,
     ::VkDescriptorType descriptorType,
     ::VkShaderStageFlags stageFlags,
-    ::std::uint32_t count) {
+    ::std::uint32_t count
+) {
   XRN_SASSERT(bindings.count(binding) == 0, "Binding already in use");
   ::VkDescriptorSetLayoutBinding layoutBinding{};
   layoutBinding.binding = binding;
@@ -25,8 +26,10 @@ auto ::xrn::engine::vulkan::descriptor::SetLayout::Builder::build() const -> ::s
 // *************** Descriptor Set Layout *********************
 
 ::xrn::engine::vulkan::descriptor::SetLayout::SetLayout(
-    ::xrn::engine::vulkan::Device &device, ::std::unordered_map<::std::uint32_t, ::VkDescriptorSetLayoutBinding> bindings)
-    : device{device}, bindings{bindings} {
+    ::xrn::engine::vulkan::Device &otherDevice
+    , ::std::unordered_map<::std::uint32_t, ::VkDescriptorSetLayoutBinding> otherBindings
+)
+    : device{otherDevice}, bindings{otherBindings} {
   ::std::vector<::VkDescriptorSetLayoutBinding> setLayoutBindings{};
   for (auto kv : bindings) {
     setLayoutBindings.push_back(kv.second);

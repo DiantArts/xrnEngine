@@ -238,23 +238,49 @@ private:
 
 };
 
-#define USING_THIS_BASIC_TYPE(argType, argParentType, ...) \
-    using ::xrn::engine::component::detail::BasicType<argType, argParentType VA_ARGS(__VA_ARGS__)>
 
-#define EXPOSE_BASIC_TYPE_METHODS(argType, argParentType, ...) \
-    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::set; \
-    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::add; \
-    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::get; \
-    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator<=>; \
-    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator=; \
-    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator+; \
-    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator+=; \
-    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator-; \
-    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator-=; \
-    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator*; \
-    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator*=; \
-    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator/; \
-    USING_THIS_BASIC_TYPE(argType, argParentType VA_ARGS(__VA_ARGS__))::operator/=
+#if defined(__clang__)
+    #ifndef XRN_VA_ARGS
+        #define XRN_VA_ARGS(...) , ##__VA_ARGS__
+    #endif // XRN_VA_ARGS
+
+    #define USING_THIS_BASIC_TYPE(argType, argParentType, ...) \
+        using ::xrn::engine::component::detail::BasicType<argType, argParentType XRN_VA_ARGS(__VA_ARGS__)>
+
+    #define EXPOSE_BASIC_TYPE_METHODS(argType, argParentType, ...) \
+        USING_THIS_BASIC_TYPE(argType, argParentType XRN_VA_ARGS(__VA_ARGS__))::set; \
+        USING_THIS_BASIC_TYPE(argType, argParentType XRN_VA_ARGS(__VA_ARGS__))::add; \
+        USING_THIS_BASIC_TYPE(argType, argParentType XRN_VA_ARGS(__VA_ARGS__))::get; \
+        USING_THIS_BASIC_TYPE(argType, argParentType XRN_VA_ARGS(__VA_ARGS__))::operator<=>; \
+        USING_THIS_BASIC_TYPE(argType, argParentType XRN_VA_ARGS(__VA_ARGS__))::operator=; \
+        USING_THIS_BASIC_TYPE(argType, argParentType XRN_VA_ARGS(__VA_ARGS__))::operator+; \
+        USING_THIS_BASIC_TYPE(argType, argParentType XRN_VA_ARGS(__VA_ARGS__))::operator+=; \
+        USING_THIS_BASIC_TYPE(argType, argParentType XRN_VA_ARGS(__VA_ARGS__))::operator-; \
+        USING_THIS_BASIC_TYPE(argType, argParentType XRN_VA_ARGS(__VA_ARGS__))::operator-=; \
+        USING_THIS_BASIC_TYPE(argType, argParentType XRN_VA_ARGS(__VA_ARGS__))::operator*; \
+        USING_THIS_BASIC_TYPE(argType, argParentType XRN_VA_ARGS(__VA_ARGS__))::operator*=; \
+        USING_THIS_BASIC_TYPE(argType, argParentType XRN_VA_ARGS(__VA_ARGS__))::operator/; \
+        USING_THIS_BASIC_TYPE(argType, argParentType XRN_VA_ARGS(__VA_ARGS__))::operator/=
+#elif defined(__GNUC__) || defined(__GNUG__)
+    #define USING_THIS_BASIC_TYPE(argType, argParentType, ...) \
+        using ::xrn::engine::component::detail::BasicType<argType, argParentType, ## __VA_ARGS__>
+
+    #define EXPOSE_BASIC_TYPE_METHODS(argType, argParentType, ...) \
+        USING_THIS_BASIC_TYPE(argType, argParentType, ## __VA_ARGS__)::set; \
+        USING_THIS_BASIC_TYPE(argType, argParentType, ## __VA_ARGS__)::add; \
+        USING_THIS_BASIC_TYPE(argType, argParentType, ## __VA_ARGS__)::get; \
+        USING_THIS_BASIC_TYPE(argType, argParentType, ## __VA_ARGS__)::operator<=>; \
+        USING_THIS_BASIC_TYPE(argType, argParentType, ## __VA_ARGS__)::operator=; \
+        USING_THIS_BASIC_TYPE(argType, argParentType, ## __VA_ARGS__)::operator+; \
+        USING_THIS_BASIC_TYPE(argType, argParentType, ## __VA_ARGS__)::operator+=; \
+        USING_THIS_BASIC_TYPE(argType, argParentType, ## __VA_ARGS__)::operator-; \
+        USING_THIS_BASIC_TYPE(argType, argParentType, ## __VA_ARGS__)::operator-=; \
+        USING_THIS_BASIC_TYPE(argType, argParentType, ## __VA_ARGS__)::operator*; \
+        USING_THIS_BASIC_TYPE(argType, argParentType, ## __VA_ARGS__)::operator*=; \
+        USING_THIS_BASIC_TYPE(argType, argParentType, ## __VA_ARGS__)::operator/; \
+        USING_THIS_BASIC_TYPE(argType, argParentType, ## __VA_ARGS__)::operator/=
+#endif // __clang__
+
 
 ///////////////////////////////////////////////////////////////////////////
 /// \brief Adds the isChanged flag

@@ -19,17 +19,16 @@
 
 ///////////////////////////////////////////////////////////////////////////
 void ::xrn::engine::system::UpdateTransform3d::operator()(
-    ::xrn::engine::vulkan::FrameInfo& frameInfo [[ maybe_unused ]]
-    , ::xrn::engine::component::Transform3d& transform
+    ::xrn::engine::component::Transform3d& transform
     , ::xrn::OptRef<::xrn::engine::component::Position> position
     , ::xrn::OptRef<::xrn::engine::component::Rotation> rotation
     , ::xrn::OptRef<::xrn::engine::component::Scale> scale
-    , ::xrn::OptRef<::xrn::engine::component::Direction> direction
+    , ::xrn::OptRef<::xrn::engine::component::Direction> direction [[ maybe_unused ]]
 ) const
 {
-    if (position) {
-        if (rotation) {
-            if (scale) {
+    if (!position.isEmpty()) {
+        if (!rotation.isEmpty()) {
+            if (!scale.isEmpty()) {
                 if (position->isChanged() || rotation->isChanged() || scale->isChanged()) {
                     transform.updateMatrix(position, rotation, scale);
                     transform.updateNormalMatrix(rotation, scale);
@@ -60,7 +59,7 @@ void ::xrn::engine::system::UpdateTransform3d::operator()(
                 // direction->resetChangedFlag();
             // }
         } else {
-            if (scale) {
+            if (!scale.isEmpty()) {
                 if (position->isChanged() || scale->isChanged()) {
                     transform.updateMatrix(position);
                     transform.updateMatrix(position, scale);

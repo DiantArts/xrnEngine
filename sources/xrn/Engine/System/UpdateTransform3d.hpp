@@ -31,8 +31,7 @@ public:
     ///
     ///////////////////////////////////////////////////////////////////////////
     void operator()(
-        ::xrn::engine::vulkan::FrameInfo& frameInfo
-        , ::xrn::engine::component::Transform3d& transform
+        ::xrn::engine::component::Transform3d& transform
         , ::xrn::OptRef<::xrn::engine::component::Position> position
         , ::xrn::OptRef<::xrn::engine::component::Rotation> rotation
         , ::xrn::OptRef<::xrn::engine::component::Scale> scale

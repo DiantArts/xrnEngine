@@ -2,8 +2,14 @@
 #include <xrn/Engine/Vulkan/Device.hpp>
 #include <xrn/Engine/Vulkan/errorToString.hpp>
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wold-style-cast"
+#ifdef __clang__
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wold-style-cast"
+#elif defined(__GNUC__) || defined(__GNUG__)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wold-style-cast"
+    #pragma GCC diagnostic ignored "-Wuseless-cast"
+#endif
 
 namespace xrn::engine::vulkan {
 
@@ -46,7 +52,7 @@ void DestroyDebugUtilsMessengerEXT(
 }
 
 // class member functions
-Device::Device(::xrn::engine::vulkan::Window &window) : window{window} {
+Device::Device(::xrn::engine::vulkan::Window &otherWindow) : window{otherWindow} {
   createInstance();
   setupDebugMessenger();
   createSurface();
@@ -528,4 +534,8 @@ void Device::createImageWithInfo(
 
 }  // namespace xrn::engine::vulkan
 
-#pragma clang diagnostic pop
+#ifdef __clang__
+    #pragma clang diagnostic pop
+#elif defined(__GNUC__) || defined(__GNUG__)
+    #pragma GCC diagnostic pop
+#endif

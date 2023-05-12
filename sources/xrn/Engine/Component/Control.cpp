@@ -323,7 +323,12 @@ auto ::xrn::engine::component::Control::rotate(
     , const float rotationOffsetZ
 ) -> Control&
 {
-    return this->rotate(rotationOffsetX, rotationOffsetY, rotationOffsetZ);
+    m_rotation.add(::glm::vec3{
+        rotationOffsetX * ::xrn::engine::configuration.sensitivity.x
+        , rotationOffsetY * ::xrn::engine::configuration.sensitivity.y
+        , rotationOffsetZ * ::xrn::engine::configuration.sensitivity.z
+    });
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////

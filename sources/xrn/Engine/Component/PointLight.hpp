@@ -10,10 +10,10 @@ struct PointLight {
         PushConstant() = default;
         PushConstant(
             const ::xrn::engine::component::PointLight& pointLight
-            , const ::xrn::engine::component::Position& position
+            , const ::xrn::engine::component::Position& otherPosition
         )
             : color{ pointLight.color }
-            , position{ position.get(), pointLight.radius }
+            , position{ otherPosition.get(), pointLight.radius }
         {}
         ::glm::vec4 color; // w == intensity
         ::glm::vec4 position; // w == radius

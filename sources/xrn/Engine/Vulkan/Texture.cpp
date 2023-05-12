@@ -45,7 +45,7 @@
         , &textureChannels
         , STBI_rgb_alpha
     ) };
-    ::VkDeviceSize imageSize{ textureWidth * textureHeight * 4 };
+    ::VkDeviceSize imageSize{ static_cast<VkDeviceSize>(textureWidth * textureHeight * 4) };
 
     XRN_FATAL_ASSERT(pixels, "Failed to load texture image");
 
@@ -64,7 +64,7 @@
     // copy pixels to vulkan buffer
     void* data;
     ::vkMapMemory(device.device(), stagingBufferMemory, 0, imageSize, 0, &data);
-    ::std::memcpy(data, pixels, static_cast<::std::size_t>(imageSize));
+    ::std::memcpy(data, pixels, imageSize);
     ::vkUnmapMemory(device.device(), stagingBufferMemory);
 
     // unload image

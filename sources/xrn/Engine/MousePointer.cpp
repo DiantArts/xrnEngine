@@ -82,11 +82,11 @@ auto ::xrn::engine::MousePointer::castToPlane(
 ) const
     -> ::glm::vec3
 {
-    auto normalizePlane{ [](const ::glm::vec3& planeRotation){
+    auto normalizePlane{ [](const ::glm::vec3& rotation){
         ::glm::mat4 rotationMatrix{
-            ::glm::rotate(::glm::mat4(1.0f), planeRotation.z, ::glm::vec3(0, 0, 1))
-            * ::glm::rotate(::glm::mat4(1.0f), planeRotation.y, ::glm::vec3(0, 1, 0))
-            * ::glm::rotate(::glm::mat4(1.0f), planeRotation.x, ::glm::vec3(1, 0, 0))
+            ::glm::rotate(::glm::mat4(1.0f), rotation.z, ::glm::vec3(0, 0, 1))
+            * ::glm::rotate(::glm::mat4(1.0f), rotation.y, ::glm::vec3(0, 1, 0))
+            * ::glm::rotate(::glm::mat4(1.0f), rotation.x, ::glm::vec3(1, 0, 0))
         };
         return ::glm::normalize(::glm::vec3{ rotationMatrix * ::glm::vec4{ 0, 0, 1, 0 } });
     } };

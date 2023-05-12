@@ -469,7 +469,7 @@ auto ::xrn::engine::AScene::update()
     for (auto [entity, position, velocity] : m_registry.view<Position, Velocity>().each()) {
         auto* acceleration{ m_registry.try_get<Acceleration>(entity) };
         auto* mass{ m_registry.try_get<Mass>(entity) };
-        m_updatePosition(m_frameInfo, position, velocity, acceleration, mass);
+        m_updatePosition(m_frameInfo.deltaTime, position, velocity, acceleration, mass);
     }
 
     // transform (apply position rotation scale)
@@ -478,7 +478,7 @@ auto ::xrn::engine::AScene::update()
         auto* rotation{ m_registry.try_get<Rotation>(entity) };
         auto* scale{ m_registry.try_get<Scale>(entity) };
         auto* direction{ m_registry.try_get<Direction>(entity) };
-        m_updateTransform3d(m_frameInfo, transform, position, rotation, scale, direction);
+        m_updateTransform3d(transform, position, rotation, scale, direction);
     }
 
     {

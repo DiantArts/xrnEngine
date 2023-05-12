@@ -2,10 +2,10 @@
 #include <xrn/Engine/Vulkan/Descriptor/Writer.hpp>
 
 ::xrn::engine::vulkan::descriptor::Writer::Writer(
-    ::xrn::engine::vulkan::descriptor::SetLayout &setLayout,
-    ::xrn::engine::vulkan::descriptor::Pool &pool
+    ::xrn::engine::vulkan::descriptor::SetLayout &otherSetLayout,
+    ::xrn::engine::vulkan::descriptor::Pool &otherPool
 )
-    : setLayout{setLayout}, pool{pool}
+    : setLayout{otherSetLayout}, pool{otherPool}
 {}
 
 ::xrn::engine::vulkan::descriptor::Writer &::xrn::engine::vulkan::descriptor::Writer::writeBuffer(

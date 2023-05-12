@@ -172,10 +172,19 @@ void ::xrn::engine::vulkan::Renderer::beginSwapChainRenderPass(
     renderPassInfo.renderArea.extent = m_pSwapChain->getSwapChainExtent();
 
     std::array<::VkClearValue, 2> clearValues{};
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wmissing-braces"
+#ifdef __clang__
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wmissing-braces"
+#elif defined(__GNUC__) || defined(__GNUG__)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wmissing-braces"
+#endif // __clang__
     clearValues[0].color = { 0.01f, 0.01f, 0.01f, 1.0f };
-#pragma clang diagnostic pop
+#ifdef __clang__
+    #pragma clang diagnostic pop
+#elif defined(__GNUC__) || defined(__GNUG__)
+    #pragma GCC diagnostic pop
+#endif // __clang__
     clearValues[1].depthStencil = { 1.0f, 0 };
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();

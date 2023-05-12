@@ -13,6 +13,6 @@
 ///////////////////////////////////////////////////////////////////////////
 // Global
 ///////////////////////////////////////////////////////////////////////////
-namespace xrn::engine::detail::configuration {
-    ::xrn::engine::detail::configuration::Configuration configuration{};
-}
+// namespace xrn::engine::detail::configuration {
+    // ::xrn::engine::detail::configuration::Configuration configuration{};
+// }

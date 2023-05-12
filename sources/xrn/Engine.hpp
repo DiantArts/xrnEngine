@@ -111,6 +111,7 @@ template <
 #include <xrn/Engine/AScene.hpp>
 #include <xrn/Engine/Components.hpp>
 #include <xrn/Engine/Configuration.hpp>
+#include <xrn/Engine/Vulkan/errorToString.hpp>
 
 
 

@@ -435,6 +435,36 @@ template <
 template <
     typename T
     , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::getXNormal() const
+    -> Vector3
+{
+    return Vector3{ ::glm::cross(this->get(), ::glm::vec3(1.f, 0.f, 0.f)) };
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::getYNormal() const
+    -> Vector3
+{
+    return Vector3{ ::glm::cross(this->get(), ::glm::vec3(0.f, 1.f, 0.f)) };
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
+> auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::getZNormal() const
+    -> Vector3
+{
+    return Vector3{ ::glm::cross(this->get(), ::glm::vec3(0.f, 0.f, 1.f)) };
+}
+
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T
+    , bool hasChangedFlag
 > auto ::xrn::engine::component::detail::Vector3<T, hasChangedFlag>::reflect(
     const ::glm::vec3& normal
 ) -> Vector3::ParentType&

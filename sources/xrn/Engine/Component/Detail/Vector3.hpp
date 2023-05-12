@@ -347,6 +347,24 @@ public:
     ///////////////////////////////////////////////////////////////////////////
     ///
     ///////////////////////////////////////////////////////////////////////////
+    auto getXNormal() const
+        -> Vector3;
+
+    ///////////////////////////////////////////////////////////////////////////
+    ///
+    ///////////////////////////////////////////////////////////////////////////
+    auto getYNormal() const
+        -> Vector3;
+
+    ///////////////////////////////////////////////////////////////////////////
+    ///
+    ///////////////////////////////////////////////////////////////////////////
+    auto getZNormal() const
+        -> Vector3;
+
+    ///////////////////////////////////////////////////////////////////////////
+    ///
+    ///////////////////////////////////////////////////////////////////////////
     auto reflect(
         const ::glm::vec3& normal
     ) -> Vector3::ParentType&;
@@ -443,41 +461,79 @@ public:
 
 } // namespace xrn::engine::component::detail
 
-#define USING_THIS_VECTOR3(argParentType, ...) \
-    using ::xrn::engine::component::detail::Vector3<argParentType VA_ARGS(__VA_ARGS__)>
+#if defined(__clang__)
+    #define USING_THIS_VECTOR3(argParentType, ...) \
+        using ::xrn::engine::component::detail::Vector3<argParentType XRN_VA_ARGS(__VA_ARGS__)>
 
-#define EXPOSE_VECTOR3_METHODS(argParentType, ...) \
-    EXPOSE_BASIC_TYPE_METHODS(::glm::vec3, argParentType VA_ARGS(__VA_ARGS__)); \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::set; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::setX; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::setY; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::setZ; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::setXY; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::setXZ; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::setYZ; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::add; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::addX; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::addY; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::addZ; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::addXY; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::addXZ; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::addYZ; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::getX; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::getY; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::getZ; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::getXY; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::getXZ; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::getYZ; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator<=>; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator=; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator+; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator+=; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator-; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator-=; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator*; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator*=; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator/; \
-    USING_THIS_VECTOR3(argParentType VA_ARGS(__VA_ARGS__))::operator/=
+    #define EXPOSE_VECTOR3_METHODS(argParentType, ...) \
+        EXPOSE_BASIC_TYPE_METHODS(::glm::vec3, argParentType XRN_VA_ARGS(__VA_ARGS__)); \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::set; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::setX; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::setY; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::setZ; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::setXY; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::setXZ; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::setYZ; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::add; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::addX; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::addY; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::addZ; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::addXY; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::addXZ; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::addYZ; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::getX; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::getY; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::getZ; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::getXY; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::getXZ; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::getYZ; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::operator<=>; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::operator=; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::operator+; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::operator+=; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::operator-; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::operator-=; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::operator*; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::operator*=; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::operator/; \
+        USING_THIS_VECTOR3(argParentType XRN_VA_ARGS(__VA_ARGS__))::operator/=
+#elif defined(__GNUC__) || defined(__GNUG__)
+    #define USING_THIS_VECTOR3(argParentType, ...) \
+        using ::xrn::engine::component::detail::Vector3<argParentType, ## __VA_ARGS__>
+
+    #define EXPOSE_VECTOR3_METHODS(argParentType, ...) \
+        EXPOSE_BASIC_TYPE_METHODS(::glm::vec3, argParentType, ## __VA_ARGS__); \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::set; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::setX; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::setY; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::setZ; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::setXY; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::setXZ; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::setYZ; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::add; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::addX; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::addY; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::addZ; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::addXY; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::addXZ; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::addYZ; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::getX; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::getY; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::getZ; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::getXY; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::getXZ; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::getYZ; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::operator<=>; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::operator=; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::operator+; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::operator+=; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::operator-; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::operator-=; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::operator*; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::operator*=; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::operator/; \
+        USING_THIS_VECTOR3(argParentType, ## __VA_ARGS__)::operator/=
+#endif // __clang__
 
 ///////////////////////////////////////////////////////////////////////////
 // Header-implimentation
